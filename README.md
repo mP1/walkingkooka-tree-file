@@ -1,0 +1,3 @@
+[![Coverage Status](https://coveralls.io/repos/github/mP1/walkingkooka-tree-file/badge.svg?branch=master)](https://coveralls.io/github/mP1/walkingkooka-tree-file?branch=master)
+
+A [walkingkooka/tree.Node](https://github.com/mP1/walkingkooka/blob/master/Node.md) read only view of a file system files and directories, primarily interesting because of xpath selection [walkingkooka/tree.NodeSelector](https://github.com/mP1/walkingkooka/blob/master/src/main/java/walkingkooka/tree/select/NodeSelector.java)
