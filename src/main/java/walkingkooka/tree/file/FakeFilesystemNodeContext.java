@@ -17,30 +17,37 @@
 
 package walkingkooka.tree.file;
 
-import walkingkooka.type.PublicStaticHelper;
+import walkingkooka.test.Fake;
 
 import java.nio.file.Path;
 
-public final class FilesystemNodeContexts implements PublicStaticHelper {
+public class FakeFilesystemNodeContext implements FilesystemNodeContext, Fake {
 
-    /**
-     * {@see BasicFilesystemNodeContext}
-     */
-    public static FilesystemNodeContext basic(final Path rootPath) {
-        return BasicFilesystemNodeContext.with(rootPath);
+    protected FakeFilesystemNodeContext() {
     }
 
-    /**
-     * {@see FakeFilesystemNodeContext}
-     */
-    public static FilesystemNodeContext fake() {
-        return new FakeFilesystemNodeContext();
+    @Override
+    public Path rootPath() {
+        throw new UnsupportedOperationException();
     }
 
-    /**
-     * Stop construction
-     */
-    private FilesystemNodeContexts() {
+    @Override
+    public FilesystemNode directory(final Path path) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public FilesystemNode file(final Path path) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean mustLoad(final FilesystemNode node, final FilesystemNodeCacheAtom atom) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String text(final Path path) throws Exception {
         throw new UnsupportedOperationException();
     }
 }
