@@ -1,10 +1,47 @@
-[![Coverage Status](https://coveralls.io/repos/github/mP1/walkingkooka-tree-file/badge.svg?branch=master)](https://coveralls.io/github/mP1/walkingkooka-tree-file?branch=master)
+/*
+ * Copyright 2019 Miroslav Pokorny (github.com/mP1)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 
-A [walkingkooka/tree.Node](https://github.com/mP1/walkingkooka/blob/master/Node.md) read only view of a file system files and directories, primarily interesting because of xpath selection [walkingkooka/tree.NodeSelector](https://github.com/mP1/walkingkooka/blob/master/src/main/java/walkingkooka/tree/select/NodeSelector.java)
+package walkingkooka.tree.file;
 
-The snipper below is taken from [ReadmeSample.java](https://github.com/mP1/walkingkooka-tree-file/tree/master/src/test/java/walkingkooka/tree/file/ReadmeSample.java).
+import walkingkooka.convert.Converters;
+import walkingkooka.math.DecimalNumberContexts;
+import walkingkooka.predicate.Predicates;
+import walkingkooka.text.CharSequences;
+import walkingkooka.text.cursor.TextCursors;
+import walkingkooka.text.cursor.parser.Parser;
+import walkingkooka.text.cursor.parser.ParserReporters;
+import walkingkooka.tree.select.NodeSelector;
+import walkingkooka.tree.select.NodeSelectorContexts;
+import walkingkooka.tree.select.parser.NodeSelectorExpressionParserToken;
+import walkingkooka.tree.select.parser.NodeSelectorParserContext;
+import walkingkooka.tree.select.parser.NodeSelectorParserContexts;
+import walkingkooka.tree.select.parser.NodeSelectorParsers;
 
-```java
+import java.math.MathContext;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public final class ReadmeSample {
+
+    /**
+     * Extremely minimalist without checking required command line params are available, and other basics.
+     */
     public static void main(final String[] args) throws Exception {
         System.out.println(Arrays.stream(args).collect(Collectors.joining(" ", "Command line args:\n", "\n")));
 
@@ -17,7 +54,7 @@ The snipper below is taken from [ReadmeSample.java](https://github.com/mP1/walki
                 .orReport(ParserReporters.basic())
                 .cast();
 
-        // parse into a NodeSelector 
+        // parse into token then selector
         final NodeSelector<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> find = FilesystemNode.nodeSelectorExpressionParserToken(
                 parser.parse(TextCursors.charSequence(selector), NodeSelectorParserContexts.basic())
                         .map(NodeSelectorExpressionParserToken.class::cast)
@@ -42,22 +79,4 @@ The snipper below is taken from [ReadmeSample.java](https://github.com/mP1/walki
                 })
                 .forEach(System.out::println);
     }
-```
-
-Using the following command line.
-```
-/Users/miroslav/repos-github/walkingkooka-tree-file //*[ends-with(name(node()),".java")] Sample
-```
-
-The following output is produced.
-```text
-/Users/miroslav/repos-github/walkingkooka-tree-file/src/test/java/walkingkooka/tree/file/ReadmeSample.java
-```
-
-The steps in performed using the given command line arguments, may be summarised into the following:
-
-- Starting at path base (argument #1)
-- Parse (argument #2) into a `NodeSelector`.
-- Create a `Stream`, which honours the parsed selector.
-- Selector filters only files ending with `.java`.
-- Filter only matches files that contain (argument #3).
+}
