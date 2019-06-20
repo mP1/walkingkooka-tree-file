@@ -35,7 +35,7 @@ public final class FilesystemNodeAttributeMapEntrySetTest implements ClassTestin
 
     protected FilesystemNode createNode() {
         final Path home = Paths.get(".");
-        return FilesystemNode.directory(home, new FilesystemNodeContext() {
+        return FilesystemNode.directory(home, new FakeFilesystemNodeContext() {
 
             @Override
             public Path rootPath() {
@@ -43,23 +43,8 @@ public final class FilesystemNodeAttributeMapEntrySetTest implements ClassTestin
             }
 
             @Override
-            public FilesystemNode directory(final Path path) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public FilesystemNode file(final Path path) {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
             public boolean mustLoad(final FilesystemNode node, final FilesystemNodeCacheAtom atom) {
                 return true;
-            }
-
-            @Override
-            public String text(final Path path) {
-                throw new UnsupportedOperationException();
             }
         });
     }
