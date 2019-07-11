@@ -19,7 +19,7 @@ The snipper below is taken from [ReadmeSample.java](https://github.com/mP1/walki
 
         // parse into a NodeSelector 
         final NodeSelector<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> find = FilesystemNode.nodeSelectorExpressionParserToken(
-                parser.parse(TextCursors.charSequence(selector), NodeSelectorParserContexts.basic())
+                parser.parse(TextCursors.charSequence(selector), NodeSelectorParserContexts.basic(DecimalNumberContexts.american(MathContext.DECIMAL32))))
                         .map(NodeSelectorExpressionParserToken.class::cast)
                         .orElseThrow(() -> new Exception("Failed to parse selector")),
                 Predicates.always());
