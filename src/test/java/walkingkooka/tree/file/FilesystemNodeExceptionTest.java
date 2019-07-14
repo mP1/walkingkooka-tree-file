@@ -18,11 +18,27 @@
 package walkingkooka.tree.file;
 
 import walkingkooka.test.StandardThrowableTesting;
+import walkingkooka.type.JavaVisibility;
 
 public final class FilesystemNodeExceptionTest implements StandardThrowableTesting<FilesystemNodeException> {
 
     @Override
+    public FilesystemNodeException createThrowable(final String message) {
+        return new FilesystemNodeException(message);
+    }
+
+    @Override
+    public FilesystemNodeException createThrowable(final String message, final Throwable cause) {
+        return new FilesystemNodeException(message, cause);
+    }
+
+    @Override
     public Class<FilesystemNodeException> type() {
         return FilesystemNodeException.class;
+    }
+
+    @Override
+    public JavaVisibility typeVisibility() {
+        return JavaVisibility.PUBLIC;
     }
 }
