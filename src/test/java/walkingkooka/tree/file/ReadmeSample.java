@@ -17,7 +17,9 @@
 
 package walkingkooka.tree.file;
 
+import walkingkooka.convert.ConverterContexts;
 import walkingkooka.convert.Converters;
+import walkingkooka.datetime.DateTimeContexts;
 import walkingkooka.math.DecimalNumberContexts;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.text.CharSequences;
@@ -67,7 +69,7 @@ public final class ReadmeSample {
         find.stream(filesystemNodeContext.directory(baseDir),
                 NodeSelectorContexts.basicFunctions(),
                 Converters.simple(), // many functions operate on strings converters convert values to strings.
-                DecimalNumberContexts.american(MathContext.DECIMAL32), // used when parsing numbers within expressions.
+                ConverterContexts.basic(DateTimeContexts.fake(), DecimalNumberContexts.american(MathContext.DECIMAL32)), // used when parsing numbers within expressions.
                 FilesystemNode.class)
                 .filter(f -> {
                     // filter equivalent of [contains(@text, "insert arg2 here"])
