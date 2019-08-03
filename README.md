@@ -30,7 +30,7 @@ The snipper below is taken from [ReadmeSample.java](https://github.com/mP1/walki
         find.stream(filesystemNodeContext.directory(baseDir),
                 NodeSelectorContexts.basicFunctions(),
                 Converters.simple(), // many functions operate on strings converters convert values to strings.
-                DecimalNumberContexts.american(MathContext.DECIMAL32), // used when parsing numbers within expressions.
+                ConverterContexts.basic(DateTimeContexts.fake(), DecimalNumberContexts.american(MathContext.DECIMAL32)), // used when parsing numbers within expressions.
                 FilesystemNode.class)
                 .filter(f -> {
                     // filter equivalent of [contains(@text, "insert arg2 here"])
