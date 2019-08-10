@@ -102,11 +102,6 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
     // Tests ...........................................................................................................
 
     @Test
-    public void testParentOfRoot() {
-        this.checkWithoutParent(this.createNode());
-    }
-
-    @Test
     public void testDirectoryAttributesKeySet() {
         assertEquals(DirectoryFilesystemNode.ATTRIBUTE_NAMES, this.createNode().attributes().keySet());
     }
