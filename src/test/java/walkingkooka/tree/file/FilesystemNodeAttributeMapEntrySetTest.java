@@ -17,7 +17,7 @@
 
 package walkingkooka.tree.file;
 
-import walkingkooka.collect.set.SetTesting;
+import walkingkooka.collect.set.SetTesting2;
 import walkingkooka.test.ClassTesting2;
 import walkingkooka.type.JavaVisibility;
 
@@ -26,7 +26,7 @@ import java.nio.file.Paths;
 import java.util.Map.Entry;
 
 public final class FilesystemNodeAttributeMapEntrySetTest implements ClassTesting2<FilesystemNodeAttributeMapEntrySet>,
-        SetTesting<FilesystemNodeAttributeMapEntrySet, Entry<FilesystemNodeAttributeName, String>> {
+        SetTesting2<FilesystemNodeAttributeMapEntrySet, Entry<FilesystemNodeAttributeName, String>> {
 
     @Override
     public FilesystemNodeAttributeMapEntrySet createSet() {
