@@ -18,8 +18,8 @@
 package walkingkooka.tree.file;
 
 import org.junit.jupiter.api.Test;
-import walkingkooka.test.ClassTesting2;
-import walkingkooka.type.JavaVisibility;
+import walkingkooka.reflect.ClassTesting2;
+import walkingkooka.reflect.JavaVisibility;
 
 import java.util.EnumSet;
 import java.util.Set;

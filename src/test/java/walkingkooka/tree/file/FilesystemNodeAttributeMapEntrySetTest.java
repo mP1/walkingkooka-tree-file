@@ -18,8 +18,8 @@
 package walkingkooka.tree.file;
 
 import walkingkooka.collect.set.SetTesting2;
-import walkingkooka.test.ClassTesting2;
-import walkingkooka.type.JavaVisibility;
+import walkingkooka.reflect.ClassTesting2;
+import walkingkooka.reflect.JavaVisibility;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

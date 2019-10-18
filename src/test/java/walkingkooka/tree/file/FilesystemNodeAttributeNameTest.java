@@ -18,9 +18,9 @@
 package walkingkooka.tree.file;
 
 import walkingkooka.naming.NameTesting;
-import walkingkooka.test.ClassTesting2;
+import walkingkooka.reflect.ClassTesting2;
+import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.text.CaseSensitivity;
-import walkingkooka.type.JavaVisibility;
 
 public final class FilesystemNodeAttributeNameTest implements ClassTesting2<FilesystemNodeAttributeName>,
         NameTesting<FilesystemNodeAttributeName, FilesystemNodeAttributeName> {

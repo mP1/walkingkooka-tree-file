@@ -20,9 +20,9 @@ package walkingkooka.tree.file;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import walkingkooka.naming.NameTesting;
-import walkingkooka.test.ClassTesting2;
+import walkingkooka.reflect.ClassTesting2;
+import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.text.CaseSensitivity;
-import walkingkooka.type.JavaVisibility;
 
 public final class FilesystemNodeNameTest implements ClassTesting2<FilesystemNodeName>,
         NameTesting<FilesystemNodeName, FilesystemNodeName> {

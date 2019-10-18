@@ -22,7 +22,6 @@ import walkingkooka.convert.Converters;
 import walkingkooka.datetime.DateTimeContexts;
 import walkingkooka.math.DecimalNumberContexts;
 import walkingkooka.predicate.Predicates;
-import walkingkooka.text.CharSequences;
 import walkingkooka.text.cursor.TextCursors;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserReporters;
