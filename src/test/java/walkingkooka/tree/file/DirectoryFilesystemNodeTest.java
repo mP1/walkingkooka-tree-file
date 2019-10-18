@@ -17,8 +17,8 @@
 
 package walkingkooka.tree.file;
 
-import walkingkooka.test.ClassTesting2;
-import walkingkooka.type.JavaVisibility;
+import walkingkooka.reflect.ClassTesting2;
+import walkingkooka.reflect.JavaVisibility;
 
 public final class DirectoryFilesystemNodeTest implements ClassTesting2<DirectoryFilesystemNode> {
 

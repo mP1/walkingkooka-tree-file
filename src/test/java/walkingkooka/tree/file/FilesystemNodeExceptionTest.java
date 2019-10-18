@@ -17,8 +17,8 @@
 
 package walkingkooka.tree.file;
 
-import walkingkooka.test.StandardThrowableTesting;
-import walkingkooka.type.JavaVisibility;
+import walkingkooka.reflect.JavaVisibility;
+import walkingkooka.reflect.StandardThrowableTesting;
 
 public final class FilesystemNodeExceptionTest implements StandardThrowableTesting<FilesystemNodeException> {
 

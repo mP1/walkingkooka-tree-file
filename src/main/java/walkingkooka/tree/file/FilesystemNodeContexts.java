@@ -17,7 +17,7 @@
 
 package walkingkooka.tree.file;
 
-import walkingkooka.type.PublicStaticHelper;
+import walkingkooka.reflect.PublicStaticHelper;
 
 import java.nio.file.Path;
 
