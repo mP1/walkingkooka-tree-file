@@ -32,6 +32,11 @@ public class FakeFilesystemNodeContext implements FilesystemNodeContext, Fake {
     }
 
     @Override
+    public FilesystemNode entry(final Path path) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public FilesystemNode directory(final Path path) {
         throw new UnsupportedOperationException();
     }
