@@ -35,6 +35,12 @@ public interface FilesystemNodeContext extends Context {
     Path rootPath();
 
     /**
+     * Factory that creates a {@link FilesystemNode} which includes testing if the path is a directory or file.
+     * Implementations should use a cache of some sort matching paths to filenodes.
+     */
+    FilesystemNode entry(final Path path);
+
+    /**
      * Factory that creates a {@link FilesystemNode}. Implementations should use a cache of some sort matching paths to filenodes.
      */
     FilesystemNode directory(final Path path);

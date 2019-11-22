@@ -57,6 +57,13 @@ final class BasicFilesystemNodeContext implements FilesystemNodeContext {
     private final Path rootPath;
 
     @Override
+    public FilesystemNode entry(final Path path) {
+        return Files.isDirectory(path) ?
+                this.directory(path) :
+                this.file(path);
+    }
+
+    @Override
     public FilesystemNode directory(final Path path) {
         return FilesystemNode.directory(path, this);
     }

@@ -343,6 +343,18 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
             }
 
             @Override
+            public FilesystemNode entry(final Path path) {
+                FilesystemNode node = pathToFileNode.get(path);
+                if (null == node) {
+                    node = Files.isDirectory(path) ?
+                            FilesystemNode.directory(path, this) :
+                            FilesystemNode.file(path, this);
+                    pathToFileNode.put(path, node);
+                }
+                return node;
+            }
+
+            @Override
             public FilesystemNode directory(final Path path) {
                 FilesystemNode node = pathToFileNode.get(path);
                 if (null == node) {
