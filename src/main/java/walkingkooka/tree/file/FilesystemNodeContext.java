@@ -30,7 +30,7 @@ import java.nio.file.Path;
 public interface FilesystemNodeContext extends Context {
 
     /**
-     * The root path of the file system being represented as a {@link FilesystemNode} graph.
+     * The root {@link Path} of the file system being represented as a {@link FilesystemNode} graph.
      */
     Path rootPath();
 
@@ -41,12 +41,12 @@ public interface FilesystemNodeContext extends Context {
     FilesystemNode entry(final Path path);
 
     /**
-     * Factory that creates a {@link FilesystemNode}. Implementations should use a cache of some sort matching paths to filenodes.
+     * Factory that creates a {@link FilesystemNode}. Implementations might want to cache paths to {@link FilesystemNode}.
      */
     FilesystemNode directory(final Path path);
 
     /**
-     * Factory that creates a {@link FilesystemNode}. Implementations should use a cache of some sort matching paths to filenodes.
+     * Factory that creates a {@link FilesystemNode}. Implementations might want to cache paths to {@link FilesystemNode}.
      */
     FilesystemNode file(final Path path);
 
@@ -56,7 +56,7 @@ public interface FilesystemNodeContext extends Context {
     boolean mustLoad(final FilesystemNode node, final FilesystemNodeCacheAtom atom);
 
     /**
-     * Returns the text form for the given path. This might be as simple as reading a text file, returning nothing if
+     * Returns the {@link String text} form for the given {@link Path}. This might be as simple as reading a text file, returning nothing if
      * too many binary type characters/bytes are found, or doing something a little extra such as identifying the file to be
      * a PDF and extracting text from that.
      */
