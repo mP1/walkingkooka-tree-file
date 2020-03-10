@@ -26,6 +26,7 @@ import java.util.Set;
 /**
  * A {@link java.util.Map} that holds the attributes for both files and directories.
  */
+@SuppressWarnings("lgtm[java/inconsistent-equals-and-hashcode]")
 final class FilesystemNodeAttributeMap extends AbstractMap<FilesystemNodeAttributeName, String> {
 
     static {
