@@ -17,6 +17,8 @@
 
 package walkingkooka.tree.file;
 
+import walkingkooka.collect.iterator.Iterators;
+import walkingkooka.collect.map.Maps;
 import walkingkooka.collect.set.Sets;
 
 import java.util.AbstractSet;
@@ -43,7 +45,11 @@ final class FilesystemNodeAttributeMapEntrySet extends AbstractSet<Entry<Filesys
 
     @Override
     public Iterator<Entry<FilesystemNodeAttributeName, String>> iterator() {
-        return FilesystemNodeAttributeMapEntrySetIterator.with(this.node);
+        return Iterators.mapping(node.attributeNames().iterator(), this::iteratorMapper);
+    }
+
+    private Entry<FilesystemNodeAttributeName, String> iteratorMapper(final FilesystemNodeAttributeName name) {
+        return Maps.entry(name, name.read(this.node));
     }
 
     @Override
