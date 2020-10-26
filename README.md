@@ -11,43 +11,49 @@ A [walkingkooka/tree.Node](https://github.com/mP1/walkingkooka/blob/master/Node.
 The snipper below is taken from [ReadmeSample.java](https://github.com/mP1/walkingkooka-tree-file/tree/master/src/test/java/walkingkooka/tree/file/ReadmeSample.java).
 
 ```java
-    public static void main(final String[] args) throws Exception {
-        System.out.println(Arrays.stream(args).collect(Collectors.joining(" ", "Command line args:\n", "\n")));
+private final static ExpressionNumberKind KIND = ExpressionNumberKind.DEFAULT;
 
-        final Path baseDir = Paths.get(args[0]);
-        final String selector = args[1];
-        final String containsText = args[2];
+   /**
+    * Extremely minimalist without checking required command line params are available, and other basics.
+    */
+   public static void main(final String[] args) throws Exception {
+       System.out.println(Arrays.stream(args).collect(Collectors.joining(" ", "Command line args:\n", "\n")));
 
-        // node selector parser
-        final Parser<NodeSelectorParserContext> parser = NodeSelectorParsers.expression()
-                .orReport(ParserReporters.basic())
-                .cast();
+       final Path baseDir = Paths.get(args[0]);
+       final String selector = args[1];
+       final String containsText = args[2];
 
-        // parse into a NodeSelector 
-        final NodeSelector<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> find = FilesystemNode.nodeSelectorExpressionParserToken(
-                parser.parse(TextCursors.charSequence(selector), NodeSelectorParserContexts.basic(DecimalNumberContexts.american(MathContext.DECIMAL32))))
-                        .map(NodeSelectorExpressionParserToken.class::cast)
-                        .orElseThrow(() -> new Exception("Failed to parse selector")),
-                Predicates.always());
+       // node selector parser
+       final Parser<NodeSelectorParserContext> parser = NodeSelectorParsers.expression()
+               .orReport(ParserReporters.basic())
+               .cast();
 
-        final FilesystemNodeContext filesystemNodeContext = FilesystemNodeContexts.basic(baseDir);
+       // parse into token then selector
+       final NodeSelector<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> find = FilesystemNode.nodeSelectorExpressionParserToken(
+               parser.parse(TextCursors.charSequence(selector), NodeSelectorParserContexts.basic(ExpressionNumberContexts.basic(KIND, MathContext.DECIMAL32)))
+                       .map(NodeSelectorExpressionParserToken.class::cast)
+                       .orElseThrow(() -> new Exception("Failed to parse selector")),
+               Predicates.always());
 
-        // stream, filter if files contain arg[2] and then print matching files.
-        find.stream(filesystemNodeContext.directory(baseDir),
-                NodeSelectorContexts.basicFunctions(),
-                Converters.simple(), // many functions operate on strings converters convert values to strings.
-                ConverterContexts.basic(DateTimeContexts.fake(), DecimalNumberContexts.american(MathContext.DECIMAL32)), // used when parsing numbers within expressions.
-                FilesystemNode.class)
-                .filter(f -> {
-                    // filter equivalent of [contains(@text, "insert arg2 here"])
-                    try {
-                        return filesystemNodeContext.text(f.path).contains(containsText);
-                    } catch (final Exception cause) {
-                        return false;
-                    }
-                })
-                .forEach(System.out::println);
-    }
+       final FilesystemNodeContext filesystemNodeContext = FilesystemNodeContexts.basic(baseDir);
+
+       // stream, filter if files contain arg[2] and then print matching files.
+       find.stream(filesystemNodeContext.directory(baseDir),
+               KIND,
+               NodeSelectorContexts.basicFunctions(),
+               Converters.simple(), // many functions operate on strings converters convert values to strings.
+               ConverterContexts.basic(DateTimeContexts.fake(), DecimalNumberContexts.american(MathContext.DECIMAL32)), // used when parsing numbers within expressions.
+               FilesystemNode.class)
+               .filter(f -> {
+                   // filter equivalent of [contains(@text, "insert arg2 here"])
+                   try {
+                       return filesystemNodeContext.text(f.path).contains(containsText);
+                   } catch (final Exception cause) {
+                       return false;
+                   }
+               })
+               .forEach(System.out::println);
+   }
 ```
 
 Using the following command line.
