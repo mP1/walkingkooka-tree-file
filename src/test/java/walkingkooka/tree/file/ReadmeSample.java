@@ -25,6 +25,8 @@ import walkingkooka.predicate.Predicates;
 import walkingkooka.text.cursor.TextCursors;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserReporters;
+import walkingkooka.tree.expression.ExpressionNumberContexts;
+import walkingkooka.tree.expression.ExpressionNumberKind;
 import walkingkooka.tree.select.NodeSelector;
 import walkingkooka.tree.select.NodeSelectorContexts;
 import walkingkooka.tree.select.parser.NodeSelectorExpressionParserToken;
@@ -39,6 +41,8 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public final class ReadmeSample {
+
+    private final static ExpressionNumberKind KIND = ExpressionNumberKind.DEFAULT;
 
     /**
      * Extremely minimalist without checking required command line params are available, and other basics.
@@ -57,7 +61,7 @@ public final class ReadmeSample {
 
         // parse into token then selector
         final NodeSelector<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> find = FilesystemNode.nodeSelectorExpressionParserToken(
-                parser.parse(TextCursors.charSequence(selector), NodeSelectorParserContexts.basic(DecimalNumberContexts.american(MathContext.DECIMAL32)))
+                parser.parse(TextCursors.charSequence(selector), NodeSelectorParserContexts.basic(ExpressionNumberContexts.basic(KIND, MathContext.DECIMAL32)))
                         .map(NodeSelectorExpressionParserToken.class::cast)
                         .orElseThrow(() -> new Exception("Failed to parse selector")),
                 Predicates.always());
@@ -66,6 +70,7 @@ public final class ReadmeSample {
 
         // stream, filter if files contain arg[2] and then print matching files.
         find.stream(filesystemNodeContext.directory(baseDir),
+                KIND,
                 NodeSelectorContexts.basicFunctions(),
                 Converters.simple(), // many functions operate on strings converters convert values to strings.
                 ConverterContexts.basic(DateTimeContexts.fake(), DecimalNumberContexts.american(MathContext.DECIMAL32)), // used when parsing numbers within expressions.
