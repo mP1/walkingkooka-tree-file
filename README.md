@@ -73,13 +73,13 @@ public static void main(final String[] args) throws Exception {
 private static Optional<ExpressionFunction<?>> function(final FunctionExpressionName name) {
     final Map<FunctionExpressionName, ExpressionFunction<?>> nameToFunction = Maps.sorted();
 
-    NumberExpressionFunctions.visit((f) -> nameToFunction.put(f.name(), f));
-    StringExpressionFunctions.visit(1, (f) -> nameToFunction.put(f.name(), f));
+    final Consumer<ExpressionFunction<?>> f = (ff) -> nameToFunction.put(ff.name(), ff);
 
-    final ExpressionFunction<?> function = nameToFunction.get(name);
-    return null != function ?
-            Optional.of(function) :
-            NodeSelectorContexts.basicFunctions().apply(name);
+    ExpressionFunctions.visit(f);
+    NumberExpressionFunctions.visit(f);
+    StringExpressionFunctions.visit(1, f);
+
+    return Optional.ofNullable(nameToFunction.get(name));
 }
 ```
 
