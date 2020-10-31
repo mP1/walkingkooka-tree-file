@@ -15,7 +15,7 @@
  *
  */
 
-package walkingkooka.tree.file;
+package walkingkooka.tree.file.sample;
 
 import walkingkooka.Either;
 import walkingkooka.collect.map.Maps;
@@ -32,6 +32,11 @@ import walkingkooka.tree.expression.FunctionExpressionName;
 import walkingkooka.tree.expression.function.ExpressionFunction;
 import walkingkooka.tree.expression.function.number.NumberExpressionFunctions;
 import walkingkooka.tree.expression.function.string.StringExpressionFunctions;
+import walkingkooka.tree.file.FilesystemNode;
+import walkingkooka.tree.file.FilesystemNodeAttributeName;
+import walkingkooka.tree.file.FilesystemNodeContext;
+import walkingkooka.tree.file.FilesystemNodeContexts;
+import walkingkooka.tree.file.FilesystemNodeName;
 import walkingkooka.tree.select.NodeSelector;
 import walkingkooka.tree.select.NodeSelectorContexts;
 import walkingkooka.tree.select.parser.NodeSelectorExpressionParserToken;
@@ -100,7 +105,7 @@ public final class ReadmeSample {
                 .filter(f -> {
                     // filter equivalent of [contains(@text, "insert arg2 here"])
                     try {
-                        return filesystemNodeContext.text(f.path).contains(containsText);
+                        return filesystemNodeContext.text(f.value()).contains(containsText);
                     } catch (final Exception cause) {
                         return false;
                     }
