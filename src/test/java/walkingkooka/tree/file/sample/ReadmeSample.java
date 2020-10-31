@@ -30,6 +30,7 @@ import walkingkooka.tree.expression.ExpressionNumberConverterContexts;
 import walkingkooka.tree.expression.ExpressionNumberKind;
 import walkingkooka.tree.expression.FunctionExpressionName;
 import walkingkooka.tree.expression.function.ExpressionFunction;
+import walkingkooka.tree.expression.function.ExpressionFunctions;
 import walkingkooka.tree.expression.function.number.NumberExpressionFunctions;
 import walkingkooka.tree.expression.function.string.StringExpressionFunctions;
 import walkingkooka.tree.file.FilesystemNode;
@@ -38,7 +39,6 @@ import walkingkooka.tree.file.FilesystemNodeContext;
 import walkingkooka.tree.file.FilesystemNodeContexts;
 import walkingkooka.tree.file.FilesystemNodeName;
 import walkingkooka.tree.select.NodeSelector;
-import walkingkooka.tree.select.NodeSelectorContexts;
 import walkingkooka.tree.select.parser.NodeSelectorExpressionParserToken;
 import walkingkooka.tree.select.parser.NodeSelectorParserContext;
 import walkingkooka.tree.select.parser.NodeSelectorParserContexts;
@@ -50,6 +50,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public final class ReadmeSample {
@@ -116,12 +117,12 @@ public final class ReadmeSample {
     private static Optional<ExpressionFunction<?>> function(final FunctionExpressionName name) {
         final Map<FunctionExpressionName, ExpressionFunction<?>> nameToFunction = Maps.sorted();
 
-        NumberExpressionFunctions.visit((f) -> nameToFunction.put(f.name(), f));
-        StringExpressionFunctions.visit(1, (f) -> nameToFunction.put(f.name(), f));
+        final Consumer<ExpressionFunction<?>> f = (ff) -> nameToFunction.put(ff.name(), ff);
 
-        final ExpressionFunction<?> function = nameToFunction.get(name);
-        return null != function ?
-                Optional.of(function) :
-                NodeSelectorContexts.basicFunctions().apply(name);
+        ExpressionFunctions.visit(f);
+        NumberExpressionFunctions.visit(f);
+        StringExpressionFunctions.visit(1, f);
+
+        return Optional.ofNullable(nameToFunction.get(name));
     }
 }
