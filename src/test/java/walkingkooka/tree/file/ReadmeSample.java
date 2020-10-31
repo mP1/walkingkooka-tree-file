@@ -18,6 +18,7 @@
 package walkingkooka.tree.file;
 
 import walkingkooka.Either;
+import walkingkooka.collect.map.Maps;
 import walkingkooka.convert.FakeConverter;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.text.cursor.TextCursors;
@@ -29,6 +30,8 @@ import walkingkooka.tree.expression.ExpressionNumberConverterContexts;
 import walkingkooka.tree.expression.ExpressionNumberKind;
 import walkingkooka.tree.expression.FunctionExpressionName;
 import walkingkooka.tree.expression.function.ExpressionFunction;
+import walkingkooka.tree.expression.function.number.NumberExpressionFunctions;
+import walkingkooka.tree.expression.function.string.StringExpressionFunctions;
 import walkingkooka.tree.select.NodeSelector;
 import walkingkooka.tree.select.NodeSelectorContexts;
 import walkingkooka.tree.select.parser.NodeSelectorExpressionParserToken;
@@ -40,6 +43,7 @@ import java.math.MathContext;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -105,6 +109,14 @@ public final class ReadmeSample {
     }
 
     private static Optional<ExpressionFunction<?>> function(final FunctionExpressionName name) {
-        return NodeSelectorContexts.basicFunctions().apply(name); // TODO need to check NumberExpressionFunctions, StringExpressionFunctions
+        final Map<FunctionExpressionName, ExpressionFunction<?>> nameToFunction = Maps.sorted();
+
+        NumberExpressionFunctions.visit((f) -> nameToFunction.put(f.name(), f));
+        StringExpressionFunctions.visit(1, (f) -> nameToFunction.put(f.name(), f));
+
+        final ExpressionFunction<?> function = nameToFunction.get(name);
+        return null != function ?
+                Optional.of(function) :
+                NodeSelectorContexts.basicFunctions().apply(name);
     }
 }
