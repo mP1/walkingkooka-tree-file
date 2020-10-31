@@ -17,16 +17,18 @@
 
 package walkingkooka.tree.file;
 
-import walkingkooka.convert.ConverterContexts;
-import walkingkooka.convert.Converters;
-import walkingkooka.datetime.DateTimeContexts;
-import walkingkooka.math.DecimalNumberContexts;
+import walkingkooka.Either;
+import walkingkooka.convert.FakeConverter;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.text.cursor.TextCursors;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserReporters;
 import walkingkooka.tree.expression.ExpressionNumberContexts;
+import walkingkooka.tree.expression.ExpressionNumberConverterContext;
+import walkingkooka.tree.expression.ExpressionNumberConverterContexts;
 import walkingkooka.tree.expression.ExpressionNumberKind;
+import walkingkooka.tree.expression.FunctionExpressionName;
+import walkingkooka.tree.expression.function.ExpressionFunction;
 import walkingkooka.tree.select.NodeSelector;
 import walkingkooka.tree.select.NodeSelectorContexts;
 import walkingkooka.tree.select.parser.NodeSelectorExpressionParserToken;
@@ -38,6 +40,7 @@ import java.math.MathContext;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public final class ReadmeSample {
@@ -70,10 +73,25 @@ public final class ReadmeSample {
 
         // stream, filter if files contain arg[2] and then print matching files.
         find.stream(filesystemNodeContext.directory(baseDir),
-                KIND,
-                NodeSelectorContexts.basicFunctions(),
-                Converters.simple(), // many functions operate on strings converters convert values to strings.
-                ConverterContexts.basic(DateTimeContexts.fake(), DecimalNumberContexts.american(MathContext.DECIMAL32)), // used when parsing numbers within expressions.
+                ReadmeSample::function,
+                new FakeConverter<ExpressionNumberConverterContext>() {
+                    @Override
+                    public boolean canConvert(final Object value,
+                                              final Class<?> type,
+                                              final ExpressionNumberConverterContext context) {
+                        return type.isInstance(value);
+                    }
+
+                    @Override
+                    public <T> Either<T, String> convert(final Object value,
+                                                         final Class<T> type,
+                                                         final ExpressionNumberConverterContext context) {
+                        return this.canConvert(value, type, context) ?
+                                Either.left(type.cast(value)) :
+                                this.failConversion(value, type);
+                    }
+                }, // many functions operate on strings converters convert values to strings.
+                ExpressionNumberConverterContexts.fake(),
                 FilesystemNode.class)
                 .filter(f -> {
                     // filter equivalent of [contains(@text, "insert arg2 here"])
@@ -84,5 +102,9 @@ public final class ReadmeSample {
                     }
                 })
                 .forEach(System.out::println);
+    }
+
+    private static Optional<ExpressionFunction<?>> function(final FunctionExpressionName name) {
+        return NodeSelectorContexts.basicFunctions().apply(name); // TODO need to check NumberExpressionFunctions, StringExpressionFunctions
     }
 }
