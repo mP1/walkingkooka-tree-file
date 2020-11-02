@@ -17,20 +17,29 @@
 
 package walkingkooka.tree.file.sample;
 
+import walkingkooka.Cast;
 import walkingkooka.Either;
 import walkingkooka.collect.map.Maps;
+import walkingkooka.convert.Converter;
 import walkingkooka.convert.FakeConverter;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.text.cursor.TextCursors;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserReporters;
+import walkingkooka.tree.expression.Expression;
+import walkingkooka.tree.expression.ExpressionEvaluationContext;
+import walkingkooka.tree.expression.ExpressionEvaluationContexts;
 import walkingkooka.tree.expression.ExpressionNumberContexts;
 import walkingkooka.tree.expression.ExpressionNumberConverterContext;
 import walkingkooka.tree.expression.ExpressionNumberConverterContexts;
 import walkingkooka.tree.expression.ExpressionNumberKind;
+import walkingkooka.tree.expression.ExpressionReference;
 import walkingkooka.tree.expression.FunctionExpressionName;
 import walkingkooka.tree.expression.function.ExpressionFunction;
+import walkingkooka.tree.expression.function.ExpressionFunctionContext;
+import walkingkooka.tree.expression.function.ExpressionFunctionContexts;
 import walkingkooka.tree.expression.function.ExpressionFunctions;
+import walkingkooka.tree.expression.function.FakeExpressionFunctionContext;
 import walkingkooka.tree.expression.function.number.NumberExpressionFunctions;
 import walkingkooka.tree.expression.function.string.StringExpressionFunctions;
 import walkingkooka.tree.file.FilesystemNode;
@@ -39,6 +48,9 @@ import walkingkooka.tree.file.FilesystemNodeContext;
 import walkingkooka.tree.file.FilesystemNodeContexts;
 import walkingkooka.tree.file.FilesystemNodeName;
 import walkingkooka.tree.select.NodeSelector;
+import walkingkooka.tree.select.NodeSelectorContext;
+import walkingkooka.tree.select.NodeSelectorExpressionEvaluationContexts;
+import walkingkooka.tree.select.NodeSelectorExpressionFunctionContexts;
 import walkingkooka.tree.select.parser.NodeSelectorExpressionParserToken;
 import walkingkooka.tree.select.parser.NodeSelectorParserContext;
 import walkingkooka.tree.select.parser.NodeSelectorParserContexts;
@@ -48,9 +60,12 @@ import java.math.MathContext;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class ReadmeSample {
@@ -83,25 +98,7 @@ public final class ReadmeSample {
 
         // stream, filter if files contain arg[2] and then print matching files.
         find.stream(filesystemNodeContext.directory(baseDir),
-                ReadmeSample::function,
-                new FakeConverter<ExpressionNumberConverterContext>() {
-                    @Override
-                    public boolean canConvert(final Object value,
-                                              final Class<?> type,
-                                              final ExpressionNumberConverterContext context) {
-                        return type.isInstance(value);
-                    }
-
-                    @Override
-                    public <T> Either<T, String> convert(final Object value,
-                                                         final Class<T> type,
-                                                         final ExpressionNumberConverterContext context) {
-                        return this.canConvert(value, type, context) ?
-                                Either.left(type.cast(value)) :
-                                this.failConversion(value, type);
-                    }
-                }, // many functions operate on strings converters convert values to strings.
-                ExpressionNumberConverterContexts.fake(),
+                ReadmeSample::expressionEvaluationContext,
                 FilesystemNode.class)
                 .filter(f -> {
                     // filter equivalent of [contains(@text, "insert arg2 here"])
@@ -114,15 +111,68 @@ public final class ReadmeSample {
                 .forEach(System.out::println);
     }
 
-    private static Optional<ExpressionFunction<?>> function(final FunctionExpressionName name) {
-        final Map<FunctionExpressionName, ExpressionFunction<?>> nameToFunction = Maps.sorted();
+    private static ExpressionEvaluationContext expressionEvaluationContext(final NodeSelectorContext<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> selectorContext) {
+        final FilesystemNode file = selectorContext.node();
 
-        final Consumer<ExpressionFunction<?>> f = (ff) -> nameToFunction.put(ff.name(), ff);
+        return NodeSelectorExpressionEvaluationContexts.basic(file,
+                ExpressionEvaluationContexts.basic(KIND,
+                        functions(file),
+                        references(),
+                        converter(),
+                        converterContext()));
+    }
+
+    private static BiFunction<FunctionExpressionName, List<Object>, Object> functions(final FilesystemNode file) {
+        return (n, p) -> {
+            return function(n)
+                    .orElseThrow(() -> new IllegalArgumentException("Unknown function: " + n + ", parameters: " + p))
+                    .apply(p, NodeSelectorExpressionFunctionContexts.basic(file, new FakeExpressionFunctionContext() {
+                        @Override
+                        public <T> Either<T, String> convert(final Object value,
+                                                             final Class<T> target) {
+                            return converter().convert(value, target, converterContext());
+                        }
+                    }));
+        };
+    }
+
+    private static Optional<ExpressionFunction<?, ExpressionFunctionContext>> function(final FunctionExpressionName name) {
+        final Map<FunctionExpressionName, ExpressionFunction<?, ?>> nameToFunction = Maps.sorted();
+
+        final Consumer<ExpressionFunction<?, ?>> f = (ff) -> nameToFunction.put(ff.name(), ff);
 
         ExpressionFunctions.visit(f);
         NumberExpressionFunctions.visit(f);
         StringExpressionFunctions.visit(1, f);
 
-        return Optional.ofNullable(nameToFunction.get(name));
+        return Cast.to(Optional.ofNullable(nameToFunction.get(name)));
+    }
+
+    private static Function<ExpressionReference, Optional<Expression>> references() {
+        return (r) -> Optional.empty();
+    }
+
+    private static Converter<ExpressionNumberConverterContext> converter() {
+        return new FakeConverter<>() {
+            @Override
+            public boolean canConvert(final Object value,
+                                      final Class<?> type,
+                                      final ExpressionNumberConverterContext context) {
+                return type.isInstance(value);
+            }
+
+            @Override
+            public <T> Either<T, String> convert(final Object value,
+                                                 final Class<T> type,
+                                                 final ExpressionNumberConverterContext context) {
+                return this.canConvert(value, type, context) ?
+                        Either.left(type.cast(value)) :
+                        this.failConversion(value, type);
+            }
+        }; // many functions operate on strings converters convert values to strings.
+    }
+
+    private static ExpressionNumberConverterContext converterContext() {
+        return ExpressionNumberConverterContexts.fake();
     }
 }
