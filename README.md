@@ -39,30 +39,12 @@ public static void main(final String[] args) throws Exception {
 
     // stream, filter if files contain arg[2] and then print matching files.
     find.stream(filesystemNodeContext.directory(baseDir),
-            ReadmeSample::function,
-            new FakeConverter<ExpressionNumberConverterContext>() {
-                @Override
-                public boolean canConvert(final Object value,
-                                          final Class<?> type,
-                                          final ExpressionNumberConverterContext context) {
-                    return type.isInstance(value);
-                }
-
-                @Override
-                public <T> Either<T, String> convert(final Object value,
-                                                     final Class<T> type,
-                                                     final ExpressionNumberConverterContext context) {
-                    return this.canConvert(value, type, context) ?
-                            Either.left(type.cast(value)) :
-                            this.failConversion(value, type);
-                }
-            }, // many functions operate on strings converters convert values to strings.
-            ExpressionNumberConverterContexts.fake(),
+            ReadmeSample::expressionEvaluationContext,
             FilesystemNode.class)
             .filter(f -> {
                 // filter equivalent of [contains(@text, "insert arg2 here"])
                 try {
-                    return filesystemNodeContext.text(f.path).contains(containsText);
+                    return filesystemNodeContext.text(f.value()).contains(containsText);
                 } catch (final Exception cause) {
                     return false;
                 }
@@ -70,16 +52,69 @@ public static void main(final String[] args) throws Exception {
             .forEach(System.out::println);
 }
 
-private static Optional<ExpressionFunction<?>> function(final FunctionExpressionName name) {
-    final Map<FunctionExpressionName, ExpressionFunction<?>> nameToFunction = Maps.sorted();
+private static ExpressionEvaluationContext expressionEvaluationContext(final NodeSelectorContext<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> selectorContext) {
+    final FilesystemNode file = selectorContext.node();
 
-    final Consumer<ExpressionFunction<?>> f = (ff) -> nameToFunction.put(ff.name(), ff);
+    return NodeSelectorExpressionEvaluationContexts.basic(file,
+            ExpressionEvaluationContexts.basic(KIND,
+                    functions(file),
+                    references(),
+                    converter(),
+                    converterContext()));
+}
+
+private static BiFunction<FunctionExpressionName, List<Object>, Object> functions(final FilesystemNode file) {
+    return (n, p) -> {
+        return function(n)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown function: " + n + ", parameters: " + p))
+                .apply(p, NodeSelectorExpressionFunctionContexts.basic(file, new FakeExpressionFunctionContext() {
+                    @Override
+                    public <T> Either<T, String> convert(final Object value,
+                                                         final Class<T> target) {
+                        return converter().convert(value, target, converterContext());
+                    }
+                }));
+    };
+}
+
+private static Optional<ExpressionFunction<?, ExpressionFunctionContext>> function(final FunctionExpressionName name) {
+    final Map<FunctionExpressionName, ExpressionFunction<?, ?>> nameToFunction = Maps.sorted();
+
+    final Consumer<ExpressionFunction<?, ?>> f = (ff) -> nameToFunction.put(ff.name(), ff);
 
     ExpressionFunctions.visit(f);
     NumberExpressionFunctions.visit(f);
     StringExpressionFunctions.visit(1, f);
 
-    return Optional.ofNullable(nameToFunction.get(name));
+    return Cast.to(Optional.ofNullable(nameToFunction.get(name)));
+}
+
+private static Function<ExpressionReference, Optional<Expression>> references() {
+    return (r) -> Optional.empty();
+}
+
+private static Converter<ExpressionNumberConverterContext> converter() {
+    return new FakeConverter<>() {
+        @Override
+        public boolean canConvert(final Object value,
+                                  final Class<?> type,
+                                  final ExpressionNumberConverterContext context) {
+            return type.isInstance(value);
+        }
+
+        @Override
+        public <T> Either<T, String> convert(final Object value,
+                                             final Class<T> type,
+                                             final ExpressionNumberConverterContext context) {
+            return this.canConvert(value, type, context) ?
+                    Either.left(type.cast(value)) :
+                    this.failConversion(value, type);
+        }
+    }; // many functions operate on strings converters convert values to strings.
+}
+
+private static ExpressionNumberConverterContext converterContext() {
+    return ExpressionNumberConverterContexts.fake();
 }
 ```
 
