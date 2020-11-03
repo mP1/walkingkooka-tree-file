@@ -11,110 +11,110 @@ A [walkingkooka/tree.Node](https://github.com/mP1/walkingkooka/blob/master/Node.
 The snipper below is taken from [ReadmeSample.java](https://github.com/mP1/walkingkooka-tree-file/tree/master/src/test/java/walkingkooka/tree/file/ReadmeSample.java).
 
 ```java
-private final static ExpressionNumberKind KIND = ExpressionNumberKind.DEFAULT;
+public final class ReadmeSample {
 
-/**
- * Extremely minimalist without checking required command line params are available, and other basics.
- */
-public static void main(final String[] args) throws Exception {
-    System.out.println(Arrays.stream(args).collect(Collectors.joining(" ", "Command line args:\n", "\n")));
+    private final static ExpressionNumberKind KIND = ExpressionNumberKind.DEFAULT;
 
-    final Path baseDir = Paths.get(args[0]);
-    final String selector = args[1];
-    final String containsText = args[2];
+    /**
+     * Extremely minimalist without checking required command line params are available, and other basics.
+     */
+    public static void main(final String[] args) throws Exception {
+        System.out.println(Arrays.stream(args).collect(Collectors.joining(" ", "Command line args:\n", "\n")));
 
-    // node selector parser
-    final Parser<NodeSelectorParserContext> parser = NodeSelectorParsers.expression()
-            .orReport(ParserReporters.basic())
-            .cast();
+        final Path baseDir = Paths.get(args[0]);
+        final String selector = args[1];
+        final String containsText = args[2];
 
-    // parse into token then selector
-    final NodeSelector<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> find = FilesystemNode.nodeSelectorExpressionParserToken(
-            parser.parse(TextCursors.charSequence(selector), NodeSelectorParserContexts.basic(ExpressionNumberContexts.basic(KIND, MathContext.DECIMAL32)))
-                    .map(NodeSelectorExpressionParserToken.class::cast)
-                    .orElseThrow(() -> new Exception("Failed to parse selector")),
-            Predicates.always());
+        // node selector parser
+        final Parser<NodeSelectorParserContext> parser = NodeSelectorParsers.expression()
+                .orReport(ParserReporters.basic())
+                .cast();
 
-    final FilesystemNodeContext filesystemNodeContext = FilesystemNodeContexts.basic(baseDir);
+        // parse into token then selector
+        final NodeSelector<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> find = FilesystemNode.nodeSelectorExpressionParserToken(
+                parser.parse(TextCursors.charSequence(selector), NodeSelectorParserContexts.basic(ExpressionNumberContexts.basic(KIND, MathContext.DECIMAL32)))
+                        .map(NodeSelectorExpressionParserToken.class::cast)
+                        .orElseThrow(() -> new Exception("Failed to parse selector")),
+                Predicates.always());
 
-    // stream, filter if files contain arg[2] and then print matching files.
-    find.stream(filesystemNodeContext.directory(baseDir),
-            ReadmeSample::expressionEvaluationContext,
-            FilesystemNode.class)
-            .filter(f -> {
-                // filter equivalent of [contains(@text, "insert arg2 here"])
-                try {
-                    return filesystemNodeContext.text(f.value()).contains(containsText);
-                } catch (final Exception cause) {
-                    return false;
-                }
-            })
-            .forEach(System.out::println);
-}
+        final FilesystemNodeContext filesystemNodeContext = FilesystemNodeContexts.basic(baseDir);
 
-private static ExpressionEvaluationContext expressionEvaluationContext(final NodeSelectorContext<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> selectorContext) {
-    final FilesystemNode file = selectorContext.node();
-
-    return NodeSelectorExpressionEvaluationContexts.basic(file,
-            ExpressionEvaluationContexts.basic(KIND,
-                    functions(file),
-                    references(),
-                    converter(),
-                    converterContext()));
-}
-
-private static BiFunction<FunctionExpressionName, List<Object>, Object> functions(final FilesystemNode file) {
-    return (n, p) -> {
-        return function(n)
-                .orElseThrow(() -> new IllegalArgumentException("Unknown function: " + n + ", parameters: " + p))
-                .apply(p, NodeSelectorExpressionFunctionContexts.basic(file, new FakeExpressionFunctionContext() {
-                    @Override
-                    public <T> Either<T, String> convert(final Object value,
-                                                         final Class<T> target) {
-                        return converter().convert(value, target, converterContext());
+        // stream, filter if files contain arg[2] and then print matching files.
+        find.stream(filesystemNodeContext.directory(baseDir),
+                ReadmeSample::expressionEvaluationContext,
+                FilesystemNode.class)
+                .filter(f -> {
+                    // filter equivalent of [contains(@text, "insert arg2 here"])
+                    try {
+                        return filesystemNodeContext.text(f.value()).contains(containsText);
+                    } catch (final Exception cause) {
+                        return false;
                     }
-                }));
-    };
-}
+                })
+                .forEach(System.out::println);
+    }
 
-private static Optional<ExpressionFunction<?, ExpressionFunctionContext>> function(final FunctionExpressionName name) {
-    final Map<FunctionExpressionName, ExpressionFunction<?, ?>> nameToFunction = Maps.sorted();
+    private static ExpressionEvaluationContext expressionEvaluationContext(final NodeSelectorContext<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> selectorContext) {
+        final FilesystemNode file = selectorContext.node();
 
-    final Consumer<ExpressionFunction<?, ?>> f = (ff) -> nameToFunction.put(ff.name(), ff);
+        return NodeSelectorExpressionEvaluationContexts.basic(file,
+                (r) ->
+                        ExpressionEvaluationContexts.basic(KIND,
+                                functions(file),
+                                r,
+                                converter(),
+                                converterContext()));
+    }
 
-    ExpressionFunctions.visit(f);
-    NumberExpressionFunctions.visit(f);
-    StringExpressionFunctions.visit(1, f);
+    private static BiFunction<FunctionExpressionName, List<Object>, Object> functions(final FilesystemNode file) {
+        return (n, p) -> {
+            return function(n)
+                    .orElseThrow(() -> new IllegalArgumentException("Unknown function: " + n + ", parameters: " + p))
+                    .apply(p, NodeSelectorExpressionFunctionContexts.basic(file, new FakeExpressionFunctionContext() {
+                        @Override
+                        public <T> Either<T, String> convert(final Object value,
+                                                             final Class<T> target) {
+                            return converter().convert(value, target, converterContext());
+                        }
+                    }));
+        };
+    }
 
-    return Cast.to(Optional.ofNullable(nameToFunction.get(name)));
-}
+    private static Optional<ExpressionFunction<?, ExpressionFunctionContext>> function(final FunctionExpressionName name) {
+        final Map<FunctionExpressionName, ExpressionFunction<?, ?>> nameToFunction = Maps.sorted();
 
-private static Function<ExpressionReference, Optional<Expression>> references() {
-    return (r) -> Optional.empty();
-}
+        final Consumer<ExpressionFunction<?, ?>> f = (ff) -> nameToFunction.put(ff.name(), ff);
 
-private static Converter<ExpressionNumberConverterContext> converter() {
-    return new FakeConverter<>() {
-        @Override
-        public boolean canConvert(final Object value,
-                                  final Class<?> type,
-                                  final ExpressionNumberConverterContext context) {
-            return type.isInstance(value);
-        }
+        ExpressionFunctions.visit(f);
+        NumberExpressionFunctions.visit(f);
+        StringExpressionFunctions.visit(1, f);
 
-        @Override
-        public <T> Either<T, String> convert(final Object value,
-                                             final Class<T> type,
-                                             final ExpressionNumberConverterContext context) {
-            return this.canConvert(value, type, context) ?
-                    Either.left(type.cast(value)) :
-                    this.failConversion(value, type);
-        }
-    }; // many functions operate on strings converters convert values to strings.
-}
+        return Cast.to(Optional.ofNullable(nameToFunction.get(name)));
+    }
 
-private static ExpressionNumberConverterContext converterContext() {
-    return ExpressionNumberConverterContexts.fake();
+    private static Converter<ExpressionNumberConverterContext> converter() {
+        return new FakeConverter<>() {
+            @Override
+            public boolean canConvert(final Object value,
+                                      final Class<?> type,
+                                      final ExpressionNumberConverterContext context) {
+                return type.isInstance(value);
+            }
+
+            @Override
+            public <T> Either<T, String> convert(final Object value,
+                                                 final Class<T> type,
+                                                 final ExpressionNumberConverterContext context) {
+                return this.canConvert(value, type, context) ?
+                        Either.left(type.cast(value)) :
+                        this.failConversion(value, type);
+            }
+        }; // many functions operate on strings converters convert values to strings.
+    }
+
+    private static ExpressionNumberConverterContext converterContext() {
+        return ExpressionNumberConverterContexts.fake();
+    }
 }
 ```
 
