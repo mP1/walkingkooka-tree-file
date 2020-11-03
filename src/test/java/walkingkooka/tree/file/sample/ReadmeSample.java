@@ -26,18 +26,15 @@ import walkingkooka.predicate.Predicates;
 import walkingkooka.text.cursor.TextCursors;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserReporters;
-import walkingkooka.tree.expression.Expression;
 import walkingkooka.tree.expression.ExpressionEvaluationContext;
 import walkingkooka.tree.expression.ExpressionEvaluationContexts;
 import walkingkooka.tree.expression.ExpressionNumberContexts;
 import walkingkooka.tree.expression.ExpressionNumberConverterContext;
 import walkingkooka.tree.expression.ExpressionNumberConverterContexts;
 import walkingkooka.tree.expression.ExpressionNumberKind;
-import walkingkooka.tree.expression.ExpressionReference;
 import walkingkooka.tree.expression.FunctionExpressionName;
 import walkingkooka.tree.expression.function.ExpressionFunction;
 import walkingkooka.tree.expression.function.ExpressionFunctionContext;
-import walkingkooka.tree.expression.function.ExpressionFunctionContexts;
 import walkingkooka.tree.expression.function.ExpressionFunctions;
 import walkingkooka.tree.expression.function.FakeExpressionFunctionContext;
 import walkingkooka.tree.expression.function.number.NumberExpressionFunctions;
@@ -65,7 +62,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class ReadmeSample {
@@ -115,11 +111,12 @@ public final class ReadmeSample {
         final FilesystemNode file = selectorContext.node();
 
         return NodeSelectorExpressionEvaluationContexts.basic(file,
-                ExpressionEvaluationContexts.basic(KIND,
-                        functions(file),
-                        references(),
-                        converter(),
-                        converterContext()));
+                (r) ->
+                        ExpressionEvaluationContexts.basic(KIND,
+                                functions(file),
+                                r,
+                                converter(),
+                                converterContext()));
     }
 
     private static BiFunction<FunctionExpressionName, List<Object>, Object> functions(final FilesystemNode file) {
@@ -146,10 +143,6 @@ public final class ReadmeSample {
         StringExpressionFunctions.visit(1, f);
 
         return Cast.to(Optional.ofNullable(nameToFunction.get(name)));
-    }
-
-    private static Function<ExpressionReference, Optional<Expression>> references() {
-        return (r) -> Optional.empty();
     }
 
     private static Converter<ExpressionNumberConverterContext> converter() {
