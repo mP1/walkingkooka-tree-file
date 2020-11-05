@@ -21,6 +21,8 @@ import walkingkooka.Cast;
 import walkingkooka.Either;
 import walkingkooka.collect.map.Maps;
 import walkingkooka.convert.Converter;
+import walkingkooka.convert.ConverterContexts;
+import walkingkooka.convert.Converters;
 import walkingkooka.convert.FakeConverter;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.text.cursor.TextCursors;
@@ -62,6 +64,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class ReadmeSample {
@@ -115,22 +118,11 @@ public final class ReadmeSample {
                         ExpressionEvaluationContexts.basic(KIND,
                                 functions(file),
                                 r,
-                                converter(),
                                 converterContext()));
     }
 
-    private static BiFunction<FunctionExpressionName, List<Object>, Object> functions(final FilesystemNode file) {
-        return (n, p) -> {
-            return function(n)
-                    .orElseThrow(() -> new IllegalArgumentException("Unknown function: " + n + ", parameters: " + p))
-                    .apply(p, NodeSelectorExpressionFunctionContexts.basic(file, new FakeExpressionFunctionContext() {
-                        @Override
-                        public <T> Either<T, String> convert(final Object value,
-                                                             final Class<T> target) {
-                            return converter().convert(value, target, converterContext());
-                        }
-                    }));
-        };
+    private static Function<FunctionExpressionName, ExpressionFunction<?, ExpressionFunctionContext>> functions(final FilesystemNode file) {
+        return (n) -> function(n).orElseThrow(() -> new IllegalArgumentException("Unknown function: " + n ));
     }
 
     private static Optional<ExpressionFunction<?, ExpressionFunctionContext>> function(final FunctionExpressionName name) {
@@ -143,6 +135,10 @@ public final class ReadmeSample {
         StringExpressionFunctions.visit(1, f);
 
         return Cast.to(Optional.ofNullable(nameToFunction.get(name)));
+    }
+
+    private static ExpressionNumberConverterContext converterContext() {
+        return ExpressionNumberConverterContexts.basic(converter(), ConverterContexts.fake(), KIND);
     }
 
     private static Converter<ExpressionNumberConverterContext> converter() {
@@ -163,9 +159,5 @@ public final class ReadmeSample {
                         this.failConversion(value, type);
             }
         }; // many functions operate on strings converters convert values to strings.
-    }
-
-    private static ExpressionNumberConverterContext converterContext() {
-        return ExpressionNumberConverterContexts.fake();
     }
 }
