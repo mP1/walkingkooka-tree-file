@@ -42,7 +42,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -103,7 +102,7 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
 
     @Test
     public void testDirectoryAttributesKeySet() {
-        assertEquals(DirectoryFilesystemNode.ATTRIBUTE_NAMES, this.createNode().attributes().keySet());
+        this.checkEquals(DirectoryFilesystemNode.ATTRIBUTE_NAMES, this.createNode().attributes().keySet());
     }
 
     @Test
@@ -115,12 +114,12 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
     public void testChildrenOfRoot() {
         final FilesystemNode root = this.createNode();
         final List<FilesystemNode> children = root.children();
-        assertEquals(1, children.size(), "child count=" + children);
+        this.checkEquals(1, children.size(), "child count=" + children);
 
         assertSame(children, root.children(), "children cached");
 
         final FilesystemNode child = root.children().get(0);
-        assertEquals(FilesystemNodeName.with("sub"), child.name(), "child");
+        this.checkEquals(FilesystemNodeName.with("sub"), child.name(), "child");
     }
 
     @Test
@@ -155,12 +154,12 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
     public void testChildrenOfGraphAndAttributes() {
         final FilesystemNode root = this.createNode();
         final List<FilesystemNode> children = root.children();
-        assertEquals(1, children.size(), "child count=" + children);
+        this.checkEquals(1, children.size(), "child count=" + children);
 
         assertSame(children, root.children(), "children cached");
 
         final FilesystemNode child = root.children().get(0);
-        assertEquals(sub(), child.name(), "child");
+        this.checkEquals(sub(), child.name(), "child");
 
         FilesystemNode subSub = null;
         FilesystemNode subFile = null;
@@ -198,8 +197,8 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
     }
 
     private void checkIsDirectoryAndIsFile(final FilesystemNode node, final boolean isDirectory) {
-        assertEquals(node.isDirectory(), isDirectory, node + " isDirectory()");
-        assertEquals(node.isFile(), !isDirectory, node + " isFile()");
+        this.checkEquals(node.isDirectory(), isDirectory, node + " isDirectory()");
+        this.checkEquals(node.isFile(), !isDirectory, node + " isFile()");
     }
 
     @Test
@@ -232,7 +231,7 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
 
     @Test
     public void testFileAttributesKeySet() {
-        assertEquals(FileFilesystemNode.ATTRIBUTE_NAMES, this.subFileFileNode().attributes().keySet());
+        this.checkEquals(FileFilesystemNode.ATTRIBUTE_NAMES, this.subFileFileNode().attributes().keySet());
     }
 
     @Test
@@ -242,7 +241,7 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
 
     private void checkAttributes(final FilesystemNode node, final Set<FilesystemNodeAttributeName> names) {
         final Map<FilesystemNodeAttributeName, String> read = node.attributes();
-        assertEquals(names.size(), read.size(), "read attributes size");
+        this.checkEquals(names.size(), read.size(), "read attributes size");
 
         final Map<FilesystemNodeAttributeName, String> attributes = Maps.ordered();
         for (Entry<FilesystemNodeAttributeName, String> nameAndValue : read.entrySet()) {
@@ -255,7 +254,7 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
         }
         attributes.putAll(read);
 
-        assertEquals(toList(attributes.values()), toList(read.values()), "attribute values collection");
+        this.checkEquals(toList(attributes.values()), toList(read.values()), "attribute values collection");
     }
 
     private static List<String> toList(final Collection<String> values) {
@@ -313,7 +312,7 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
 
     private String checkAttributeEquals(final FilesystemNode node, final FilesystemNodeAttributeName attribute, final String value) {
         final String actual = node.attributes().get(attribute);
-        assertEquals(value, actual, () -> node.value().getFileName() + "." + attribute);
+        this.checkEquals(value, actual, () -> node.value().getFileName() + "." + attribute);
         return actual;
     }
 
