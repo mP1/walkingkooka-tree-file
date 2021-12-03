@@ -26,8 +26,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public final class FilesystemNodeCacheAtomTest implements ClassTesting2<FilesystemNodeCacheAtom> {
 
     @Test
@@ -36,7 +34,7 @@ public final class FilesystemNodeCacheAtomTest implements ClassTesting2<Filesyst
         final Set<String> names = names(FilesystemNodeAttributeName.class);
         names.add(FilesystemNodeCacheAtom.CHILDREN.name());
 
-        assertEquals(atoms, names);
+        this.checkEquals(atoms, names);
     }
 
     private <E extends Enum<E>> Set<String> names(final Class<E> constants) {

@@ -27,7 +27,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -77,7 +76,7 @@ public final class BasicFilesystemNodeContextTest implements FilesystemNodeConte
         Files.write(file, content.getBytes(Charset.defaultCharset()));
 
         final BasicFilesystemNodeContext context = this.createContext();
-        assertEquals(content, context.text(file), () -> "text " + file);
+        this.checkEquals(content, context.text(file), () -> "text " + file);
     }
 
     @Test
