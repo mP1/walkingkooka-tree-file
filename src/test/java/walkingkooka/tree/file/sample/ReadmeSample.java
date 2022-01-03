@@ -36,6 +36,7 @@ import walkingkooka.tree.expression.ExpressionNumberKind;
 import walkingkooka.tree.expression.FunctionExpressionName;
 import walkingkooka.tree.expression.function.ExpressionFunction;
 import walkingkooka.tree.expression.function.ExpressionFunctionContext;
+import walkingkooka.tree.expression.function.ExpressionFunctionContexts;
 import walkingkooka.tree.expression.function.ExpressionFunctions;
 import walkingkooka.tree.expression.function.number.NumberExpressionFunctions;
 import walkingkooka.tree.expression.function.string.StringExpressionFunctions;
@@ -108,12 +109,17 @@ public final class ReadmeSample {
     private static ExpressionEvaluationContext expressionEvaluationContext(final NodeSelectorContext<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> selectorContext) {
         final FilesystemNode file = selectorContext.node();
 
-        return NodeSelectorExpressionEvaluationContexts.basic(file,
+        return NodeSelectorExpressionEvaluationContexts.basic(
+                file,
                 (r) ->
-                        ExpressionEvaluationContexts.basic(KIND,
+                        ExpressionEvaluationContexts.basic(
+                                KIND,
                                 functions(file),
                                 r,
-                                converterContext()));
+                                functionContext(),
+                                converterContext()
+                        )
+        );
     }
 
     private static Function<FunctionExpressionName, ExpressionFunction<?, ExpressionFunctionContext>> functions(final FilesystemNode file) {
@@ -130,6 +136,10 @@ public final class ReadmeSample {
         StringExpressionFunctions.visit(1, f);
 
         return Cast.to(Optional.ofNullable(nameToFunction.get(name)));
+    }
+
+    private static ExpressionFunctionContext functionContext() {
+        return ExpressionFunctionContexts.fake();
     }
 
     private static ExpressionNumberConverterContext converterContext() {
