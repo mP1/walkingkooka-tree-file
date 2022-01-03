@@ -59,10 +59,14 @@ public final class ReadmeSample {
 
         return NodeSelectorExpressionEvaluationContexts.basic(file,
                 (r) ->
-                        ExpressionEvaluationContexts.basic(KIND,
+                        ExpressionEvaluationContexts.basic(
+                                KIND,
                                 functions(file),
                                 r,
-                                converterContext()));
+                                functionContext(),
+                                converterContext()
+                        )
+        );
     }
 
     private static Function<FunctionExpressionName, ExpressionFunction<?, ExpressionFunctionContext>> functions(final FilesystemNode file) {
@@ -79,6 +83,10 @@ public final class ReadmeSample {
         StringExpressionFunctions.visit(1, f);
 
         return Cast.to(Optional.ofNullable(nameToFunction.get(name)));
+    }
+
+    private static ExpressionFunctionContext functionContext() {
+        return ExpressionFunctionContexts.fake();
     }
 
     private static ExpressionNumberConverterContext converterContext() {
