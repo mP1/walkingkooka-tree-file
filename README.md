@@ -41,8 +41,8 @@ public final class ReadmeSample {
 
         // stream, filter if files contain arg[2] and then print matching files.
         find.stream(filesystemNodeContext.directory(baseDir),
-                ReadmeSample::expressionEvaluationContext,
-                FilesystemNode.class)
+                        ReadmeSample::expressionEvaluationContext,
+                        FilesystemNode.class)
                 .filter(f -> {
                     // filter equivalent of [contains(@text, "insert arg2 here"])
                     try {
@@ -57,19 +57,19 @@ public final class ReadmeSample {
     private static ExpressionEvaluationContext expressionEvaluationContext(final NodeSelectorContext<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> selectorContext) {
         final FilesystemNode file = selectorContext.node();
 
-        return NodeSelectorExpressionEvaluationContexts.basic(file,
+        return NodeSelectorExpressionEvaluationContexts.basic(
+                file,
                 (r) ->
                         ExpressionEvaluationContexts.basic(
                                 KIND,
-                                functions(file),
+                                functions(),
                                 r,
-                                functionContext(),
-                                converterContext()
+                                functionContext()
                         )
         );
     }
 
-    private static Function<FunctionExpressionName, ExpressionFunction<?, ExpressionFunctionContext>> functions(final FilesystemNode file) {
+    private static Function<FunctionExpressionName, ExpressionFunction<?, ExpressionFunctionContext>> functions() {
         return (n) -> function(n).orElseThrow(() -> new IllegalArgumentException("Unknown function: " + n ));
     }
 
@@ -86,7 +86,18 @@ public final class ReadmeSample {
     }
 
     private static ExpressionFunctionContext functionContext() {
-        return ExpressionFunctionContexts.fake();
+        return ExpressionFunctionContexts.basic(
+                KIND,
+                functions(),
+                references(),
+                converterContext()
+        );
+    }
+
+    private static Function<ExpressionReference, Optional<Expression>> references() {
+        return (r -> {
+            throw new UnsupportedOperationException();
+        });
     }
 
     private static ExpressionNumberConverterContext converterContext() {

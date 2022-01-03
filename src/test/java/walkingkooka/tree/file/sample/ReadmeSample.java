@@ -27,12 +27,14 @@ import walkingkooka.predicate.Predicates;
 import walkingkooka.text.cursor.TextCursors;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserReporters;
+import walkingkooka.tree.expression.Expression;
 import walkingkooka.tree.expression.ExpressionEvaluationContext;
 import walkingkooka.tree.expression.ExpressionEvaluationContexts;
 import walkingkooka.tree.expression.ExpressionNumberContexts;
 import walkingkooka.tree.expression.ExpressionNumberConverterContext;
 import walkingkooka.tree.expression.ExpressionNumberConverterContexts;
 import walkingkooka.tree.expression.ExpressionNumberKind;
+import walkingkooka.tree.expression.ExpressionReference;
 import walkingkooka.tree.expression.FunctionExpressionName;
 import walkingkooka.tree.expression.function.ExpressionFunction;
 import walkingkooka.tree.expression.function.ExpressionFunctionContext;
@@ -114,15 +116,14 @@ public final class ReadmeSample {
                 (r) ->
                         ExpressionEvaluationContexts.basic(
                                 KIND,
-                                functions(file),
+                                functions(),
                                 r,
-                                functionContext(),
-                                converterContext()
+                                functionContext()
                         )
         );
     }
 
-    private static Function<FunctionExpressionName, ExpressionFunction<?, ExpressionFunctionContext>> functions(final FilesystemNode file) {
+    private static Function<FunctionExpressionName, ExpressionFunction<?, ExpressionFunctionContext>> functions() {
         return (n) -> function(n).orElseThrow(() -> new IllegalArgumentException("Unknown function: " + n ));
     }
 
@@ -139,7 +140,18 @@ public final class ReadmeSample {
     }
 
     private static ExpressionFunctionContext functionContext() {
-        return ExpressionFunctionContexts.fake();
+        return ExpressionFunctionContexts.basic(
+                KIND,
+                functions(),
+                references(),
+                converterContext()
+        );
+    }
+
+    private static Function<ExpressionReference, Optional<Expression>> references() {
+        return (r -> {
+            throw new UnsupportedOperationException();
+        });
     }
 
     private static ExpressionNumberConverterContext converterContext() {
