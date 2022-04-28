@@ -24,13 +24,12 @@ import walkingkooka.convert.Converter;
 import walkingkooka.convert.ConverterContexts;
 import walkingkooka.convert.FakeConverter;
 import walkingkooka.predicate.Predicates;
+import walkingkooka.text.CaseSensitivity;
 import walkingkooka.text.cursor.TextCursors;
 import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserReporters;
-import walkingkooka.tree.expression.Expression;
 import walkingkooka.tree.expression.ExpressionEvaluationContext;
 import walkingkooka.tree.expression.ExpressionEvaluationContexts;
-import walkingkooka.tree.expression.ExpressionNumberContexts;
 import walkingkooka.tree.expression.ExpressionNumberConverterContext;
 import walkingkooka.tree.expression.ExpressionNumberConverterContexts;
 import walkingkooka.tree.expression.ExpressionNumberKind;
@@ -86,7 +85,13 @@ public final class ReadmeSample {
 
         // parse into token then selector
         final NodeSelector<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> find = FilesystemNode.nodeSelectorExpressionParserToken(
-                parser.parse(TextCursors.charSequence(selector), NodeSelectorParserContexts.basic(ExpressionNumberContexts.basic(KIND, MathContext.DECIMAL32)))
+                parser.parse(
+                        TextCursors.charSequence(selector),
+                                NodeSelectorParserContexts.basic(
+                                        KIND,
+                                        MathContext.DECIMAL32
+                                )
+                        )
                         .map(NodeSelectorExpressionParserToken.class::cast)
                         .orElseThrow(() -> new Exception("Failed to parse selector")),
                 Predicates.always());
@@ -115,9 +120,6 @@ public final class ReadmeSample {
                 file,
                 (r) ->
                         ExpressionEvaluationContexts.basic(
-                                KIND,
-                                functions(),
-                                r,
                                 functionContext()
                         )
         );
@@ -134,7 +136,10 @@ public final class ReadmeSample {
 
         ExpressionFunctions.visit(f);
         NumberExpressionFunctions.visit(f);
-        StringExpressionFunctions.visit(1, f);
+        f.accept(StringExpressionFunctions.containsCaseSensitive().setName(FunctionExpressionName.with("contains")));
+        f.accept(StringExpressionFunctions.equalsCaseSensitive().setName(FunctionExpressionName.with("equals")));
+        f.accept(StringExpressionFunctions.endsWithCaseSensitive().setName(FunctionExpressionName.with("ends-with")));
+        f.accept(StringExpressionFunctions.startsWithCaseSensitive().setName(FunctionExpressionName.with("starts-with")));
 
         return Cast.to(Optional.ofNullable(nameToFunction.get(name)));
     }
@@ -144,11 +149,15 @@ public final class ReadmeSample {
                 KIND,
                 functions(),
                 references(),
+                (r)-> {
+                    throw new UnsupportedOperationException();
+                },
+                CaseSensitivity.SENSITIVE,
                 converterContext()
         );
     }
 
-    private static Function<ExpressionReference, Optional<Expression>> references() {
+    private static Function<ExpressionReference, Optional<Object>> references() {
         return (r -> {
             throw new UnsupportedOperationException();
         });
