@@ -11,7 +11,6 @@ A [walkingkooka/tree.Node](https://github.com/mP1/walkingkooka/blob/master/Node.
 # Sample
 
 A working example is avaiable at [ReadmeSample.java](https://github.com/mP1/walkingkooka-tree-file/tree/master/src/test/java/walkingkooka/tree/file/ReadmeSample.java).
-Note the [walkingkooka-tree-expression-function-string](https://github.com/mP1/walkingkooka-tree-expression-function-string) is also required.
 
 Using the following command line.
 ```
