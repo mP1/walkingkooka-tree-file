@@ -36,8 +36,6 @@ import walkingkooka.tree.expression.ExpressionNumberKind;
 import walkingkooka.tree.expression.ExpressionReference;
 import walkingkooka.tree.expression.FunctionExpressionName;
 import walkingkooka.tree.expression.function.ExpressionFunction;
-import walkingkooka.tree.expression.function.ExpressionFunctionContext;
-import walkingkooka.tree.expression.function.ExpressionFunctionContexts;
 import walkingkooka.tree.expression.function.ExpressionFunctions;
 import walkingkooka.tree.expression.function.number.NumberExpressionFunctions;
 import walkingkooka.tree.expression.function.string.StringExpressionFunctions;
@@ -120,16 +118,26 @@ public final class ReadmeSample {
                 file,
                 (r) ->
                         ExpressionEvaluationContexts.basic(
-                                functionContext()
+                                KIND,
+                                functions(),
+                                (e) -> {
+                                    throw e;
+                                },
+                                references(),
+                                (rr) -> {
+                                    throw new UnsupportedOperationException();
+                                },
+                                CaseSensitivity.SENSITIVE,
+                                converterContext()
                         )
         );
     }
 
-    private static Function<FunctionExpressionName, ExpressionFunction<?, ExpressionFunctionContext>> functions() {
-        return (n) -> function(n).orElseThrow(() -> new IllegalArgumentException("Unknown function: " + n ));
+    private static Function<FunctionExpressionName, ExpressionFunction<?, ExpressionEvaluationContext>> functions() {
+        return (n) -> function(n).orElseThrow(() -> new IllegalArgumentException("Unknown function: " + n));
     }
 
-    private static Optional<ExpressionFunction<?, ExpressionFunctionContext>> function(final FunctionExpressionName name) {
+    private static Optional<ExpressionFunction<?, ExpressionEvaluationContext>> function(final FunctionExpressionName name) {
         final Map<FunctionExpressionName, ExpressionFunction<?, ?>> nameToFunction = Maps.sorted();
 
         final Consumer<ExpressionFunction<?, ?>> f = (ff) -> nameToFunction.put(ff.name(), ff);
@@ -142,19 +150,6 @@ public final class ReadmeSample {
         f.accept(StringExpressionFunctions.startsWithCaseSensitive().setName(FunctionExpressionName.with("starts-with")));
 
         return Cast.to(Optional.ofNullable(nameToFunction.get(name)));
-    }
-
-    private static ExpressionFunctionContext functionContext() {
-        return ExpressionFunctionContexts.basic(
-                KIND,
-                functions(),
-                references(),
-                (r)-> {
-                    throw new UnsupportedOperationException();
-                },
-                CaseSensitivity.SENSITIVE,
-                converterContext()
-        );
     }
 
     private static Function<ExpressionReference, Optional<Object>> references() {
