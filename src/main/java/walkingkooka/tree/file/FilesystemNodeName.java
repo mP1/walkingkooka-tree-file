@@ -48,9 +48,9 @@ public final class FilesystemNodeName implements Name,
      * Factory that creates a new {@link FilesystemNodeName}
      */
     public static FilesystemNodeName with(final String name) {
-        CharSequences.failIfNullOrEmpty(name, "name");
-
-        return new FilesystemNodeName(name);
+        return new FilesystemNodeName(
+                CharSequences.failIfNullOrEmpty(name, "name")
+        );
     }
 
     private FilesystemNodeName(final String name) {

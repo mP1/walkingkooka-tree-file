@@ -140,19 +140,48 @@ public final class ReadmeSample {
     private static Optional<ExpressionFunction<?, ExpressionEvaluationContext>> function(final FunctionExpressionName name) {
         final Map<FunctionExpressionName, ExpressionFunction<?, ?>> nameToFunction = Maps.sorted();
 
-        final Consumer<ExpressionFunction<?, ?>> f = (ff) -> nameToFunction.put(ff.name(), ff);
+        final Consumer<ExpressionFunction<?, ?>> f = (ff) -> nameToFunction.put(ff.name().get(), ff);
 
         ExpressionFunctions.visit(f);
         NumberExpressionFunctions.visit(f);
-        f.accept(StringExpressionFunctions.containsCaseSensitive().setName(FunctionExpressionName.with("contains")));
-        f.accept(StringExpressionFunctions.equalsCaseSensitive().setName(FunctionExpressionName.with("equals")));
-        f.accept(StringExpressionFunctions.endsWithCaseSensitive().setName(FunctionExpressionName.with("ends-with")));
-        f.accept(StringExpressionFunctions.startsWithCaseSensitive().setName(FunctionExpressionName.with("starts-with")));
+
+        f.accept(
+                StringExpressionFunctions.containsCaseSensitive()
+                        .setName(
+                                Optional.of(
+                                        FunctionExpressionName.with("contains")
+                                )
+                        )
+        );
+        f.accept(
+                StringExpressionFunctions.equalsCaseSensitive()
+                        .setName(
+                                Optional.of(
+                                        FunctionExpressionName.with("equals")
+                                )
+                        )
+        );
+        f.accept(
+                StringExpressionFunctions.endsWithCaseSensitive()
+                        .setName(
+                                Optional.of(
+                                        FunctionExpressionName.with("ends-with")
+                                )
+                        )
+        );
+        f.accept(
+                StringExpressionFunctions.startsWithCaseSensitive()
+                        .setName(
+                                Optional.of(
+                                        FunctionExpressionName.with("starts-with")
+                                )
+                        )
+        );
 
         return Cast.to(Optional.ofNullable(nameToFunction.get(name)));
     }
 
-    private static Function<ExpressionReference, Optional<Object>> references() {
+    private static Function<ExpressionReference, Optional<Optional<Object>>> references() {
         return (r -> {
             throw new UnsupportedOperationException();
         });
