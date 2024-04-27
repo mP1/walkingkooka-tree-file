@@ -328,6 +328,11 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public void testReplaceIfNeverPredicate() {
+        throw new UnsupportedOperationException();
+    }
+
     // Helpers ...........................................................................................................
 
     @Override
