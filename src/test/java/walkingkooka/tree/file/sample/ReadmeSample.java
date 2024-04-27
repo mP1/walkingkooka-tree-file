@@ -37,7 +37,6 @@ import walkingkooka.tree.expression.ExpressionReference;
 import walkingkooka.tree.expression.FunctionExpressionName;
 import walkingkooka.tree.expression.function.ExpressionFunction;
 import walkingkooka.tree.expression.function.ExpressionFunctions;
-import walkingkooka.tree.expression.function.number.NumberExpressionFunctions;
 import walkingkooka.tree.expression.function.string.StringExpressionFunctions;
 import walkingkooka.tree.file.FilesystemNode;
 import walkingkooka.tree.file.FilesystemNodeAttributeName;
@@ -143,7 +142,7 @@ public final class ReadmeSample {
         final Consumer<ExpressionFunction<?, ?>> f = (ff) -> nameToFunction.put(ff.name().get(), ff);
 
         ExpressionFunctions.visit(f);
-        NumberExpressionFunctions.visit(f);
+        //NumberExpressionFunctions.visit(f);
 
         f.accept(
                 StringExpressionFunctions.containsCaseSensitive()
