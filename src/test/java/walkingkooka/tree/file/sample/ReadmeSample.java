@@ -132,8 +132,8 @@ public final class ReadmeSample {
         );
     }
 
-    private static Function<FunctionExpressionName, ExpressionFunction<?, ExpressionEvaluationContext>> functions() {
-        return (n) -> function(n).orElseThrow(() -> new IllegalArgumentException("Unknown function: " + n));
+    private static Function<FunctionExpressionName, Optional<ExpressionFunction<?, ExpressionEvaluationContext>>> functions() {
+        return (n) -> function(n);
     }
 
     private static Optional<ExpressionFunction<?, ExpressionEvaluationContext>> function(final FunctionExpressionName name) {
