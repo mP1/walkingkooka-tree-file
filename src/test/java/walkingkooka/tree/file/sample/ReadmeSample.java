@@ -30,13 +30,14 @@ import walkingkooka.text.cursor.parser.Parser;
 import walkingkooka.text.cursor.parser.ParserReporters;
 import walkingkooka.tree.expression.ExpressionEvaluationContext;
 import walkingkooka.tree.expression.ExpressionEvaluationContexts;
+import walkingkooka.tree.expression.ExpressionFunctionName;
 import walkingkooka.tree.expression.ExpressionNumberConverterContext;
 import walkingkooka.tree.expression.ExpressionNumberConverterContexts;
 import walkingkooka.tree.expression.ExpressionNumberKind;
 import walkingkooka.tree.expression.ExpressionReference;
-import walkingkooka.tree.expression.FunctionExpressionName;
 import walkingkooka.tree.expression.function.ExpressionFunction;
 import walkingkooka.tree.expression.function.ExpressionFunctions;
+import walkingkooka.tree.expression.function.UnknownExpressionFunctionException;
 import walkingkooka.tree.expression.function.string.StringExpressionFunctions;
 import walkingkooka.tree.file.FilesystemNode;
 import walkingkooka.tree.file.FilesystemNodeAttributeName;
@@ -132,12 +133,12 @@ public final class ReadmeSample {
         );
     }
 
-    private static Function<FunctionExpressionName, Optional<ExpressionFunction<?, ExpressionEvaluationContext>>> functions() {
+    private static Function<ExpressionFunctionName, ExpressionFunction<?, ExpressionEvaluationContext>> functions() {
         return (n) -> function(n);
     }
 
-    private static Optional<ExpressionFunction<?, ExpressionEvaluationContext>> function(final FunctionExpressionName name) {
-        final Map<FunctionExpressionName, ExpressionFunction<?, ?>> nameToFunction = Maps.sorted();
+    private static ExpressionFunction<?, ExpressionEvaluationContext> function(final ExpressionFunctionName name) {
+        final Map<ExpressionFunctionName, ExpressionFunction<?, ?>> nameToFunction = Maps.sorted();
 
         final Consumer<ExpressionFunction<?, ?>> f = (ff) -> nameToFunction.put(ff.name().get(), ff);
 
@@ -148,7 +149,7 @@ public final class ReadmeSample {
                 StringExpressionFunctions.containsCaseSensitive()
                         .setName(
                                 Optional.of(
-                                        FunctionExpressionName.with("contains")
+                                        ExpressionFunctionName.with("contains")
                                 )
                         )
         );
@@ -156,7 +157,7 @@ public final class ReadmeSample {
                 StringExpressionFunctions.equalsCaseSensitive()
                         .setName(
                                 Optional.of(
-                                        FunctionExpressionName.with("equals")
+                                        ExpressionFunctionName.with("equals")
                                 )
                         )
         );
@@ -164,7 +165,7 @@ public final class ReadmeSample {
                 StringExpressionFunctions.endsWithCaseSensitive()
                         .setName(
                                 Optional.of(
-                                        FunctionExpressionName.with("ends-with")
+                                        ExpressionFunctionName.with("ends-with")
                                 )
                         )
         );
@@ -172,12 +173,19 @@ public final class ReadmeSample {
                 StringExpressionFunctions.startsWithCaseSensitive()
                         .setName(
                                 Optional.of(
-                                        FunctionExpressionName.with("starts-with")
+                                        ExpressionFunctionName.with("starts-with")
                                 )
                         )
         );
 
-        return Cast.to(Optional.ofNullable(nameToFunction.get(name)));
+        final ExpressionFunction<?, ExpressionEvaluationContext> function = Cast.to(
+                nameToFunction.get(name)
+        );
+        if(null == function) {
+            throw new UnknownExpressionFunctionException(name);
+        }
+
+        return function;
     }
 
     private static Function<ExpressionReference, Optional<Optional<Object>>> references() {
