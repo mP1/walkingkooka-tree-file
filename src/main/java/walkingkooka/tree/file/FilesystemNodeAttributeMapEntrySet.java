@@ -19,7 +19,7 @@ package walkingkooka.tree.file;
 
 import walkingkooka.collect.iterator.Iterators;
 import walkingkooka.collect.map.Maps;
-import walkingkooka.collect.set.Sets;
+import walkingkooka.collect.set.ImmutableSetDefaults;
 
 import java.util.AbstractSet;
 import java.util.Iterator;
@@ -29,11 +29,8 @@ import java.util.Set;
 /**
  * A readonly {@link Set} view of entries belonging to the attribute Map view for a {@link FilesystemNode}.
  */
-final class FilesystemNodeAttributeMapEntrySet extends AbstractSet<Entry<FilesystemNodeAttributeName, String>> {
-
-    static {
-        Sets.registerImmutableType(FilesystemNodeAttributeMapEntrySet.class);
-    }
+final class FilesystemNodeAttributeMapEntrySet extends AbstractSet<Entry<FilesystemNodeAttributeName, String>>
+        implements ImmutableSetDefaults<FilesystemNodeAttributeMapEntrySet, Entry<FilesystemNodeAttributeName, String>> {
 
     static FilesystemNodeAttributeMapEntrySet with(final FilesystemNode node) {
         return new FilesystemNodeAttributeMapEntrySet(node);
@@ -58,4 +55,14 @@ final class FilesystemNodeAttributeMapEntrySet extends AbstractSet<Entry<Filesys
     }
 
     private final FilesystemNode node;
+
+    @Override
+    public FilesystemNodeAttributeMapEntrySet setElements(final Set<Entry<FilesystemNodeAttributeName, String>> elements) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Set<Entry<FilesystemNodeAttributeName, String>> toSet() {
+        throw new UnsupportedOperationException();
+    }
 }
