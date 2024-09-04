@@ -17,7 +17,7 @@
 
 package walkingkooka.tree.file;
 
-import walkingkooka.collect.set.SetTesting2;
+import walkingkooka.collect.set.ImmutableSetTesting;
 import walkingkooka.reflect.ClassTesting2;
 import walkingkooka.reflect.JavaVisibility;
 
@@ -26,14 +26,14 @@ import java.nio.file.Paths;
 import java.util.Map.Entry;
 
 public final class FilesystemNodeAttributeMapEntrySetTest implements ClassTesting2<FilesystemNodeAttributeMapEntrySet>,
-        SetTesting2<FilesystemNodeAttributeMapEntrySet, Entry<FilesystemNodeAttributeName, String>> {
+        ImmutableSetTesting<FilesystemNodeAttributeMapEntrySet, Entry<FilesystemNodeAttributeName, String>> {
 
     @Override
     public FilesystemNodeAttributeMapEntrySet createSet() {
         return FilesystemNodeAttributeMapEntrySet.with(this.createNode());
     }
 
-    protected FilesystemNode createNode() {
+    private FilesystemNode createNode() {
         final Path home = Paths.get(".");
         return FilesystemNode.directory(home, new FakeFilesystemNodeContext() {
 
@@ -50,12 +50,24 @@ public final class FilesystemNodeAttributeMapEntrySetTest implements ClassTestin
     }
 
     @Override
+    public void testSetElementsNullFails() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void testSetElementsSame() {
+        throw new UnsupportedOperationException();
+    }
+
+    // class............................................................................................................
+
+    @Override
     public Class<FilesystemNodeAttributeMapEntrySet> type() {
         return FilesystemNodeAttributeMapEntrySet.class;
     }
 
     @Override
-    public final JavaVisibility typeVisibility() {
+    public JavaVisibility typeVisibility() {
         return JavaVisibility.PACKAGE_PRIVATE;
     }
 }
