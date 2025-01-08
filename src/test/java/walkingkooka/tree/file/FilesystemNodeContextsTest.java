@@ -24,7 +24,7 @@ import walkingkooka.reflect.PublicStaticHelperTesting;
 import java.lang.reflect.Method;
 
 public final class FilesystemNodeContextsTest implements ClassTesting2<FilesystemNodeContexts>,
-        PublicStaticHelperTesting<FilesystemNodeContexts> {
+    PublicStaticHelperTesting<FilesystemNodeContexts> {
 
     @Override
     public Class<FilesystemNodeContexts> type() {

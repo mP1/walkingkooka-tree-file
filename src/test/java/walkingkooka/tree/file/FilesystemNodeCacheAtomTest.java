@@ -40,8 +40,8 @@ public final class FilesystemNodeCacheAtomTest implements ClassTesting2<Filesyst
     private <E extends Enum<E>> Set<String> names(final Class<E> constants) {
         final Set<E> all = EnumSet.allOf(constants);
         return all.stream()
-                .map(e -> e.name())
-                .collect(Collectors.toCollection(TreeSet::new));
+            .map(e -> e.name())
+            .collect(Collectors.toCollection(TreeSet::new));
     }
 
     @Override

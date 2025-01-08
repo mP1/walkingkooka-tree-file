@@ -49,7 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
-        NodeTesting<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> {
+    NodeTesting<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> {
 
     private final static String SUB = "sub";
     private final static String SUB_SUB = "subSub";
@@ -271,10 +271,10 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
     public void testSelectorUsage() {
         final FilesystemNode node = this.createNode();
         this.selectorApplyAndCheckCount(node,
-                FilesystemNode.absoluteNodeSelector()
-                        .descendant()
-                        .named(FilesystemNodeName.with(SUB_FILE)),
-                1);
+            FilesystemNode.absoluteNodeSelector()
+                .descendant()
+                .named(FilesystemNodeName.with(SUB_FILE)),
+            1);
     }
 
     private FilesystemNode subFileFileNode() {
@@ -319,7 +319,7 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
     private String checkAttributeContains(final FilesystemNode node, final FilesystemNodeAttributeName attribute, final String value) {
         final String actual = node.attributes().get(attribute);
         assertTrue(actual.contains(value),
-                () -> node.value().getFileName() + "." + attribute + "=" + CharSequences.quote(actual) + " doesnt contain " + CharSequences.quote(value));
+            () -> node.value().getFileName() + "." + attribute + "=" + CharSequences.quote(actual) + " doesnt contain " + CharSequences.quote(value));
         return actual;
     }
 
@@ -351,8 +351,8 @@ public final class FilesystemNodeTest implements ClassTesting2<FilesystemNode>,
                 FilesystemNode node = pathToFileNode.get(path);
                 if (null == node) {
                     node = Files.isDirectory(path) ?
-                            FilesystemNode.directory(path, this) :
-                            FilesystemNode.file(path, this);
+                        FilesystemNode.directory(path, this) :
+                        FilesystemNode.file(path, this);
                     pathToFileNode.put(path, node);
                 }
                 return node;

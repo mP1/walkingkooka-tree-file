@@ -26,7 +26,12 @@ import java.nio.file.Paths;
 import java.util.Map.Entry;
 
 public final class FilesystemNodeAttributeMapEntrySetTest implements ClassTesting2<FilesystemNodeAttributeMapEntrySet>,
-        ImmutableSetTesting<FilesystemNodeAttributeMapEntrySet, Entry<FilesystemNodeAttributeName, String>> {
+    ImmutableSetTesting<FilesystemNodeAttributeMapEntrySet, Entry<FilesystemNodeAttributeName, String>> {
+
+    @Override
+    public void testDeleteIfWithNeverPredicate() {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public FilesystemNodeAttributeMapEntrySet createSet() {

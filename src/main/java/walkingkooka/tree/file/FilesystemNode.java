@@ -49,9 +49,9 @@ import java.util.function.Predicate;
  * A {@link FilesystemNode} represents a file or directory under a path.
  */
 public abstract class FilesystemNode implements Node<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String>,
-        HasText,
-        TraversableHasTextOffset<FilesystemNode>,
-        Value<Path> {
+    HasText,
+    TraversableHasTextOffset<FilesystemNode>,
+    Value<Path> {
 
     /**
      * Creates a {@link FilesystemNode} for a directory.
@@ -109,8 +109,8 @@ public abstract class FilesystemNode implements Node<FilesystemNode, FilesystemN
             final Path path = this.path;
             final Path root = this.context.rootPath();
             this.parent = root.equals(path) ?
-                    Optional.empty() :
-                    Optional.of(this.context.directory(path.getParent()));
+                Optional.empty() :
+                Optional.of(this.context.directory(path.getParent()));
         }
         return this.parent;
     }
@@ -304,8 +304,8 @@ public abstract class FilesystemNode implements Node<FilesystemNode, FilesystemN
     @Override
     public boolean equals(final Object other) {
         return this == other ||
-                other instanceof FilesystemNode &&
-                        this.equals0(Cast.to(other));
+            other instanceof FilesystemNode &&
+                this.equals0(Cast.to(other));
     }
 
     private boolean equals0(final FilesystemNode other) {
@@ -342,8 +342,8 @@ public abstract class FilesystemNode implements Node<FilesystemNode, FilesystemN
     public static NodeSelector<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> nodeSelectorExpressionParserToken(final NodeSelectorExpressionParserToken token,
                                                                                                                                           final Predicate<ExpressionFunctionName> functions) {
         return NodeSelector.parserToken(token,
-                n -> FilesystemNodeName.with(n.value()),
-                functions,
-                FilesystemNode.class);
+            n -> FilesystemNodeName.with(n.value()),
+            functions,
+            FilesystemNode.class);
     }
 }

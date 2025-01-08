@@ -26,7 +26,7 @@ import walkingkooka.text.CaseSensitivity;
  * A file has the following attributes: CREATED, GROUP, HIDDEN, LAST_ACCESSED, LAST_MODIFIED, OWNER, SIZE, TEXT, TYPE
  */
 public enum FilesystemNodeAttributeName implements Name,
-        Comparable<FilesystemNodeAttributeName> {
+    Comparable<FilesystemNodeAttributeName> {
 
     /**
      * An ISO_FORMATTED timestamp of the creation, taken from {@link java.nio.file.attribute.BasicFileAttributes}

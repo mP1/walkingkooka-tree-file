@@ -78,21 +78,21 @@ public final class ReadmeSample {
 
         // node selector parser
         final Parser<NodeSelectorParserContext> parser = NodeSelectorParsers.expression()
-                .orReport(ParserReporters.basic())
-                .cast();
+            .orReport(ParserReporters.basic())
+            .cast();
 
         // parse into token then selector
         final NodeSelector<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> find = FilesystemNode.nodeSelectorExpressionParserToken(
-                parser.parse(
-                        TextCursors.charSequence(selector),
-                                NodeSelectorParserContexts.basic(
-                                        KIND,
-                                        MathContext.DECIMAL32
-                                )
-                        )
-                        .map(NodeSelectorExpressionParserToken.class::cast)
-                        .orElseThrow(() -> new Exception("Failed to parse selector")),
-                Predicates.always());
+            parser.parse(
+                    TextCursors.charSequence(selector),
+                    NodeSelectorParserContexts.basic(
+                        KIND,
+                        MathContext.DECIMAL32
+                    )
+                )
+                .map(NodeSelectorExpressionParserToken.class::cast)
+                .orElseThrow(() -> new Exception("Failed to parse selector")),
+            Predicates.always());
 
         final FilesystemNodeContext filesystemNodeContext = FilesystemNodeContexts.basic(baseDir);
 
@@ -100,36 +100,36 @@ public final class ReadmeSample {
         find.stream(filesystemNodeContext.directory(baseDir),
                 ReadmeSample::expressionEvaluationContext,
                 FilesystemNode.class)
-                .filter(f -> {
-                    // filter equivalent of [contains(@text, "insert arg2 here"])
-                    try {
-                        return filesystemNodeContext.text(f.value()).contains(containsText);
-                    } catch (final Exception cause) {
-                        return false;
-                    }
-                })
-                .forEach(System.out::println);
+            .filter(f -> {
+                // filter equivalent of [contains(@text, "insert arg2 here"])
+                try {
+                    return filesystemNodeContext.text(f.value()).contains(containsText);
+                } catch (final Exception cause) {
+                    return false;
+                }
+            })
+            .forEach(System.out::println);
     }
 
     private static ExpressionEvaluationContext expressionEvaluationContext(final NodeSelectorContext<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> selectorContext) {
         final FilesystemNode file = selectorContext.node();
 
         return NodeSelectorExpressionEvaluationContexts.basic(
-                file,
-                (r) ->
-                        ExpressionEvaluationContexts.basic(
-                                KIND,
-                                functions(),
-                                (e) -> {
-                                    throw e;
-                                },
-                                references(),
-                                (rr) -> {
-                                    throw new UnsupportedOperationException();
-                                },
-                                CaseSensitivity.SENSITIVE,
-                                converterContext()
-                        )
+            file,
+            (r) ->
+                ExpressionEvaluationContexts.basic(
+                    KIND,
+                    functions(),
+                    (e) -> {
+                        throw e;
+                    },
+                    references(),
+                    (rr) -> {
+                        throw new UnsupportedOperationException();
+                    },
+                    CaseSensitivity.SENSITIVE,
+                    converterContext()
+                )
         );
     }
 
@@ -146,42 +146,42 @@ public final class ReadmeSample {
         //NumberExpressionFunctions.visit(f);
 
         f.accept(
-                StringExpressionFunctions.containsCaseSensitive()
-                        .setName(
-                                Optional.of(
-                                        ExpressionFunctionName.with("contains")
-                                )
-                        )
+            StringExpressionFunctions.containsCaseSensitive()
+                .setName(
+                    Optional.of(
+                        ExpressionFunctionName.with("contains")
+                    )
+                )
         );
         f.accept(
-                StringExpressionFunctions.equalsCaseSensitive()
-                        .setName(
-                                Optional.of(
-                                        ExpressionFunctionName.with("equals")
-                                )
-                        )
+            StringExpressionFunctions.equalsCaseSensitive()
+                .setName(
+                    Optional.of(
+                        ExpressionFunctionName.with("equals")
+                    )
+                )
         );
         f.accept(
-                StringExpressionFunctions.endsWithCaseSensitive()
-                        .setName(
-                                Optional.of(
-                                        ExpressionFunctionName.with("ends-with")
-                                )
-                        )
+            StringExpressionFunctions.endsWithCaseSensitive()
+                .setName(
+                    Optional.of(
+                        ExpressionFunctionName.with("ends-with")
+                    )
+                )
         );
         f.accept(
-                StringExpressionFunctions.startsWithCaseSensitive()
-                        .setName(
-                                Optional.of(
-                                        ExpressionFunctionName.with("starts-with")
-                                )
-                        )
+            StringExpressionFunctions.startsWithCaseSensitive()
+                .setName(
+                    Optional.of(
+                        ExpressionFunctionName.with("starts-with")
+                    )
+                )
         );
 
         final ExpressionFunction<?, ExpressionEvaluationContext> function = Cast.to(
-                nameToFunction.get(name)
+            nameToFunction.get(name)
         );
-        if(null == function) {
+        if (null == function) {
             throw new UnknownExpressionFunctionException(name);
         }
 
@@ -212,8 +212,8 @@ public final class ReadmeSample {
                                                  final Class<T> type,
                                                  final ExpressionNumberConverterContext context) {
                 return this.canConvert(value, type, context) ?
-                        Either.left(type.cast(value)) :
-                        this.failConversion(value, type);
+                    Either.left(type.cast(value)) :
+                    this.failConversion(value, type);
             }
         }; // many functions operate on strings converters convert values to strings.
     }

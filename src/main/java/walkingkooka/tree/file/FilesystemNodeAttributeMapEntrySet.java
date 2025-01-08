@@ -30,7 +30,7 @@ import java.util.Set;
  * A readonly {@link Set} view of entries belonging to the attribute Map view for a {@link FilesystemNode}.
  */
 final class FilesystemNodeAttributeMapEntrySet extends AbstractSet<Entry<FilesystemNodeAttributeName, String>>
-        implements ImmutableSetDefaults<FilesystemNodeAttributeMapEntrySet, Entry<FilesystemNodeAttributeName, String>> {
+    implements ImmutableSetDefaults<FilesystemNodeAttributeMapEntrySet, Entry<FilesystemNodeAttributeName, String>> {
 
     static FilesystemNodeAttributeMapEntrySet with(final FilesystemNode node) {
         return new FilesystemNodeAttributeMapEntrySet(node);

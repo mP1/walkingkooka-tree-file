@@ -28,15 +28,15 @@ import java.io.File;
  * A file or directory name. Note case-sensitivity matches the same rules of the underlying filesystem.
  */
 public final class FilesystemNodeName implements Name,
-        Comparable<FilesystemNodeName> {
+    Comparable<FilesystemNodeName> {
 
     static CaseSensitivity fileSystemCaseSensitivity() {
         final String name = "lowercase";
         File lowercase = new File(name);
         File uppercase = new File(name.toUpperCase());
         return lowercase.equals(uppercase) ?
-                CaseSensitivity.INSENSITIVE :
-                CaseSensitivity.SENSITIVE;
+            CaseSensitivity.INSENSITIVE :
+            CaseSensitivity.SENSITIVE;
     }
 
     /**
@@ -49,7 +49,7 @@ public final class FilesystemNodeName implements Name,
      */
     public static FilesystemNodeName with(final String name) {
         return new FilesystemNodeName(
-                CharSequences.failIfNullOrEmpty(name, "name")
+            CharSequences.failIfNullOrEmpty(name, "name")
         );
     }
 
@@ -74,8 +74,8 @@ public final class FilesystemNodeName implements Name,
     @Override
     public boolean equals(final Object other) {
         return this == other ||
-                other instanceof FilesystemNodeName &&
-                        this.equals0(Cast.to(other));
+            other instanceof FilesystemNodeName &&
+                this.equals0(Cast.to(other));
     }
 
     private boolean equals0(final FilesystemNodeName other) {
