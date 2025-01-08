@@ -25,7 +25,7 @@ import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.text.CaseSensitivity;
 
 public final class FilesystemNodeNameTest implements ClassTesting2<FilesystemNodeName>,
-        NameTesting<FilesystemNodeName, FilesystemNodeName> {
+    NameTesting<FilesystemNodeName, FilesystemNodeName> {
 
     @Override
     @Disabled

@@ -102,11 +102,11 @@ final class DirectoryFilesystemNode extends FilesystemNode {
 
     // VisibleForTesting
     final static Set<FilesystemNodeAttributeName> ATTRIBUTE_NAMES = Sets.of(FilesystemNodeAttributeName.CREATED,
-            FilesystemNodeAttributeName.HIDDEN,
-            FilesystemNodeAttributeName.LAST_ACCESSED,
-            FilesystemNodeAttributeName.LAST_MODIFIED,
-            FilesystemNodeAttributeName.OWNER,
-            FilesystemNodeAttributeName.TYPE);
+        FilesystemNodeAttributeName.HIDDEN,
+        FilesystemNodeAttributeName.LAST_ACCESSED,
+        FilesystemNodeAttributeName.LAST_MODIFIED,
+        FilesystemNodeAttributeName.OWNER,
+        FilesystemNodeAttributeName.TYPE);
 
     @Override
     String size() {

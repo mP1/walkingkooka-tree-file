@@ -23,7 +23,7 @@ import walkingkooka.reflect.JavaVisibility;
 import walkingkooka.text.CaseSensitivity;
 
 public final class FilesystemNodeAttributeNameTest implements ClassTesting2<FilesystemNodeAttributeName>,
-        NameTesting<FilesystemNodeAttributeName, FilesystemNodeAttributeName> {
+    NameTesting<FilesystemNodeAttributeName, FilesystemNodeAttributeName> {
 
     @Override
     public void testNullFails() {

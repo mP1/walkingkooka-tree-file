@@ -37,7 +37,7 @@ final class BasicFilesystemNodeContext implements FilesystemNodeContext {
     static BasicFilesystemNodeContext with(final Path rootPath) {
         Objects.requireNonNull(rootPath, "rootPath");
 
-        if(!Files.isDirectory(rootPath)) {
+        if (!Files.isDirectory(rootPath)) {
             throw new IllegalArgumentException("Directory \"" + rootPath.toAbsolutePath() + "\" not found ");
         }
 
@@ -59,8 +59,8 @@ final class BasicFilesystemNodeContext implements FilesystemNodeContext {
     @Override
     public FilesystemNode entry(final Path path) {
         return Files.isDirectory(path) ?
-                this.directory(path) :
-                this.file(path);
+            this.directory(path) :
+            this.file(path);
     }
 
     @Override
