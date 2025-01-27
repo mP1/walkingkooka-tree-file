@@ -47,7 +47,7 @@ import walkingkooka.tree.file.FilesystemNodeName;
 import walkingkooka.tree.select.NodeSelector;
 import walkingkooka.tree.select.NodeSelectorContext;
 import walkingkooka.tree.select.NodeSelectorExpressionEvaluationContexts;
-import walkingkooka.tree.select.parser.NodeSelectorExpressionParserToken;
+import walkingkooka.tree.select.parser.ExpressionNodeSelectorParserToken;
 import walkingkooka.tree.select.parser.NodeSelectorParserContext;
 import walkingkooka.tree.select.parser.NodeSelectorParserContexts;
 import walkingkooka.tree.select.parser.NodeSelectorParsers;
@@ -90,7 +90,7 @@ public final class ReadmeSample {
                         MathContext.DECIMAL32
                     )
                 )
-                .map(NodeSelectorExpressionParserToken.class::cast)
+                .map(ExpressionNodeSelectorParserToken.class::cast)
                 .orElseThrow(() -> new Exception("Failed to parse selector")),
             Predicates.always());
 
