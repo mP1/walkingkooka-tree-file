@@ -25,7 +25,7 @@ import walkingkooka.tree.Node;
 import walkingkooka.tree.TraversableHasTextOffset;
 import walkingkooka.tree.expression.ExpressionFunctionName;
 import walkingkooka.tree.select.NodeSelector;
-import walkingkooka.tree.select.parser.NodeSelectorExpressionParserToken;
+import walkingkooka.tree.select.parser.ExpressionNodeSelectorParserToken;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -337,9 +337,9 @@ public abstract class FilesystemNode implements Node<FilesystemNode, FilesystemN
     }
 
     /**
-     * Creates a {@link NodeSelector} for {@link FilesystemNode} from a {@link NodeSelectorExpressionParserToken}.
+     * Creates a {@link NodeSelector} for {@link FilesystemNode} from a {@link ExpressionNodeSelectorParserToken}.
      */
-    public static NodeSelector<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> nodeSelectorExpressionParserToken(final NodeSelectorExpressionParserToken token,
+    public static NodeSelector<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> nodeSelectorExpressionParserToken(final ExpressionNodeSelectorParserToken token,
                                                                                                                                           final Predicate<ExpressionFunctionName> functions) {
         return NodeSelector.parserToken(token,
             n -> FilesystemNodeName.with(n.value()),
