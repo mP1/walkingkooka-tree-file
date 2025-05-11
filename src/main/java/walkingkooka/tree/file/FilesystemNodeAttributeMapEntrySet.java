@@ -24,6 +24,7 @@ import walkingkooka.collect.set.ImmutableSetDefaults;
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -55,6 +56,11 @@ final class FilesystemNodeAttributeMapEntrySet extends AbstractSet<Entry<Filesys
     }
 
     private final FilesystemNode node;
+
+    @Override
+    public void elementCheck(final Entry<FilesystemNodeAttributeName, String> entry) {
+        Objects.requireNonNull(entry, "entry");
+    }
 
     @Override
     public FilesystemNodeAttributeMapEntrySet setElements(final Set<Entry<FilesystemNodeAttributeName, String>> elements) {
