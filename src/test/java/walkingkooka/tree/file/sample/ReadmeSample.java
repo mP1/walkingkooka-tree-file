@@ -23,6 +23,7 @@ import walkingkooka.collect.map.Maps;
 import walkingkooka.convert.Converter;
 import walkingkooka.convert.ConverterContexts;
 import walkingkooka.convert.FakeConverter;
+import walkingkooka.locale.LocaleContexts;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.text.CaseSensitivity;
 import walkingkooka.text.cursor.TextCursors;
@@ -128,7 +129,8 @@ public final class ReadmeSample {
                         throw new UnsupportedOperationException();
                     },
                     CaseSensitivity.SENSITIVE,
-                    converterContext()
+                    converterContext(),
+                    LocaleContexts.fake()
                 )
         );
     }
