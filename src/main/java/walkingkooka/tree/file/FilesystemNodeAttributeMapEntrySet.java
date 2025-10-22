@@ -22,6 +22,7 @@ import walkingkooka.collect.map.Maps;
 import walkingkooka.collect.set.ImmutableSetDefaults;
 
 import java.util.AbstractSet;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -63,7 +64,7 @@ final class FilesystemNodeAttributeMapEntrySet extends AbstractSet<Entry<Filesys
     }
 
     @Override
-    public FilesystemNodeAttributeMapEntrySet setElements(final Set<Entry<FilesystemNodeAttributeName, String>> elements) {
+    public FilesystemNodeAttributeMapEntrySet setElements(final Collection<Entry<FilesystemNodeAttributeName, String>> elements) {
         throw new UnsupportedOperationException();
     }
 
