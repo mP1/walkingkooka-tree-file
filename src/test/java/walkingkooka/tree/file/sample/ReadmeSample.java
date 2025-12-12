@@ -117,21 +117,20 @@ public final class ReadmeSample {
 
         return NodeSelectorExpressionEvaluationContexts.basic(
             file,
-            (r) ->
-                ExpressionEvaluationContexts.basic(
-                    KIND,
-                    functions(),
-                    (e) -> {
-                        throw e;
-                    },
-                    references(),
-                    (rr) -> {
-                        throw new UnsupportedOperationException();
-                    },
-                    CaseSensitivity.SENSITIVE,
-                    converterContext(),
-                    LocaleContexts.fake()
-                )
+            ExpressionEvaluationContexts.basic(
+                KIND,
+                functions(),
+                (e) -> {
+                    throw e;
+                },
+                references(),
+                (rr) -> {
+                    throw new UnsupportedOperationException();
+                },
+                CaseSensitivity.SENSITIVE,
+                converterContext(),
+                LocaleContexts.fake()
+            )
         );
     }
 
