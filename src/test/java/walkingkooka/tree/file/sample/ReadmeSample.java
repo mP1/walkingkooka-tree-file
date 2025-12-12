@@ -23,6 +23,7 @@ import walkingkooka.collect.map.Maps;
 import walkingkooka.convert.Converter;
 import walkingkooka.convert.ConverterContexts;
 import walkingkooka.convert.FakeConverter;
+import walkingkooka.environment.EnvironmentContexts;
 import walkingkooka.locale.LocaleContexts;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.text.CaseSensitivity;
@@ -129,6 +130,7 @@ public final class ReadmeSample {
                 },
                 CaseSensitivity.SENSITIVE,
                 converterContext(),
+                EnvironmentContexts.fake(),
                 LocaleContexts.fake()
             )
         );
