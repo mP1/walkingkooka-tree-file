@@ -120,6 +120,9 @@ public final class ReadmeSample {
             file,
             ExpressionEvaluationContexts.basic(
                 KIND,
+                (e, c) -> {
+                    throw new UnsupportedOperationException();
+                },
                 functions(),
                 (e) -> {
                     throw e;
