@@ -18,7 +18,7 @@
 package walkingkooka.tree.file;
 
 import walkingkooka.Cast;
-import walkingkooka.Value;
+import walkingkooka.HasValue;
 import walkingkooka.text.CharSequences;
 import walkingkooka.text.HasText;
 import walkingkooka.tree.Node;
@@ -51,7 +51,7 @@ import java.util.function.Predicate;
 public abstract class FilesystemNode implements Node<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String>,
     HasText,
     TraversableHasTextOffset<FilesystemNode>,
-    Value<Path> {
+    HasValue<Path> {
 
     /**
      * Creates a {@link FilesystemNode} for a directory.
