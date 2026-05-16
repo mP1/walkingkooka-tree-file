@@ -20,6 +20,7 @@ package walkingkooka.tree.file.sample;
 import walkingkooka.Cast;
 import walkingkooka.Either;
 import walkingkooka.collect.map.Maps;
+import walkingkooka.convert.BinaryNumberConverterFunctions;
 import walkingkooka.convert.Converter;
 import walkingkooka.convert.ConverterContexts;
 import walkingkooka.convert.FakeConverter;
@@ -201,7 +202,12 @@ public final class ReadmeSample {
     }
 
     private static ExpressionNumberConverterContext converterContext() {
-        return ExpressionNumberConverterContexts.basic(converter(), ConverterContexts.fake(), KIND);
+        return ExpressionNumberConverterContexts.basic(
+            converter(),
+            BinaryNumberConverterFunctions.fake(),
+            ConverterContexts.fake(),
+            KIND
+        );
     }
 
     private static Converter<ExpressionNumberConverterContext> converter() {
