@@ -20,7 +20,6 @@ package walkingkooka.tree.file;
 import walkingkooka.collect.list.Lists;
 
 import java.nio.file.Path;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -71,7 +70,7 @@ final class FileFilesystemNode extends FilesystemNode {
     }
 
     // VisibleForTesting
-    final static Set<FilesystemNodeAttributeName> ATTRIBUTE_NAMES = EnumSet.allOf(FilesystemNodeAttributeName.class);
+    final static Set<FilesystemNodeAttributeName> ATTRIBUTE_NAMES = FilesystemNodeAttributeName.ALL;
 
     @Override
     String size() {

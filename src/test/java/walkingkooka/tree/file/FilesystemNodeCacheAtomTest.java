@@ -31,7 +31,10 @@ public final class FilesystemNodeCacheAtomTest implements ClassTesting2<Filesyst
     @Test
     public void testAtoms() {
         final Set<String> atoms = names(FilesystemNodeCacheAtom.class);
-        final Set<String> names = names(FilesystemNodeAttributeName.class);
+        final Set<String> names = FilesystemNodeAttributeName.ALL
+            .stream()
+            .map(FilesystemNodeAttributeName::value)
+            .collect(Collectors.toSet());
         names.add(FilesystemNodeCacheAtom.CHILDREN.name());
 
         this.checkEquals(atoms, names);
