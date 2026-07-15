@@ -34,16 +34,25 @@ public final class FilesystemNodeCacheAtomTest implements ClassTesting2<Filesyst
         final Set<String> names = FilesystemNodeAttributeName.ALL
             .stream()
             .map(FilesystemNodeAttributeName::value)
-            .collect(Collectors.toSet());
-        names.add(FilesystemNodeCacheAtom.CHILDREN.name());
+            .map(String::toLowerCase)
+            .collect(Collectors.toCollection(TreeSet::new));
+        names.add(
+            FilesystemNodeCacheAtom.CHILDREN.name()
+                .toLowerCase()
+        );
 
-        this.checkEquals(atoms, names);
+        this.checkEquals(
+            atoms,
+            names
+        );
     }
 
     private <E extends Enum<E>> Set<String> names(final Class<E> constants) {
         final Set<E> all = EnumSet.allOf(constants);
         return all.stream()
             .map(e -> e.name())
+            .map(String::toLowerCase)
+            .map((String string) -> string.replace("_", ""))
             .collect(Collectors.toCollection(TreeSet::new));
     }
 
