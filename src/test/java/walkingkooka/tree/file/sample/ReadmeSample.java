@@ -95,7 +95,9 @@ public final class ReadmeSample {
                 )
                 .map(ExpressionNodeSelectorParserToken.class::cast)
                 .orElseThrow(() -> new Exception("Failed to parse selector")),
-            Predicates.always());
+            Predicates.always(),
+            () -> ExpressionNumberKind.BIG_DECIMAL
+        );
 
         final FilesystemNodeContext filesystemNodeContext = FilesystemNodeContexts.basic(baseDir);
 

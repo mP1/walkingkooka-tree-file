@@ -37,7 +37,7 @@ public abstract class FilesystemNodeAttributeName implements Name,
      * An ISO_FORMATTED timestamp of the creation, taken from {@link java.nio.file.attribute.BasicFileAttributes}
      * {@see java.time.format.DateTimeFormatter}
      */
-    public final static FilesystemNodeAttributeName CREATED = new FilesystemNodeAttributeName("CREATED") {
+    public final static FilesystemNodeAttributeName CREATED = new FilesystemNodeAttributeName("created") {
         @Override
         String read(final FilesystemNode node) {
             return node.created();
@@ -47,7 +47,7 @@ public abstract class FilesystemNodeAttributeName implements Name,
     /**
      * A String holding either the boolean value of true of false using {@link java.nio.file.Files#isHidden}.
      */
-    public final static FilesystemNodeAttributeName HIDDEN = new FilesystemNodeAttributeName("HIDDEN") {
+    public final static FilesystemNodeAttributeName HIDDEN = new FilesystemNodeAttributeName("hidden") {
         @Override
         String read(final FilesystemNode node) {
             return node.hidden();
@@ -58,7 +58,7 @@ public abstract class FilesystemNodeAttributeName implements Name,
      * An ISO_FORMATTED timestamp of the last access, taken from {@link java.nio.file.attribute.BasicFileAttributes}
      * {@see java.time.format.DateTimeFormatter}
      */
-    public final static FilesystemNodeAttributeName LAST_ACCESSED = new FilesystemNodeAttributeName("LAST_ACCESSED") {
+    public final static FilesystemNodeAttributeName LAST_ACCESSED = new FilesystemNodeAttributeName("lastAccessed") {
         @Override
         String read(final FilesystemNode node) {
             return node.lastAccessed();
@@ -69,7 +69,7 @@ public abstract class FilesystemNodeAttributeName implements Name,
      * An ISO_FORMATTED timestamp of the last modification, taken from {@link java.nio.file.attribute.BasicFileAttributes}
      * {@see java.time.format.DateTimeFormatter}
      */
-    public final static FilesystemNodeAttributeName LAST_MODIFIED = new FilesystemNodeAttributeName("LAST_MODIFIED") {
+    public final static FilesystemNodeAttributeName LAST_MODIFIED = new FilesystemNodeAttributeName("lastModified") {
         @Override
         String read(final FilesystemNode node) {
             return node.lastModified();
@@ -79,7 +79,7 @@ public abstract class FilesystemNodeAttributeName implements Name,
     /**
      * The owner, taken from {@link java.nio.file.attribute.PosixFileAttributes}
      */
-    public final static FilesystemNodeAttributeName OWNER = new FilesystemNodeAttributeName("OWNER") {
+    public final static FilesystemNodeAttributeName OWNER = new FilesystemNodeAttributeName("owner") {
         @Override
         String read(final FilesystemNode node) {
             return node.owner();
@@ -90,7 +90,7 @@ public abstract class FilesystemNodeAttributeName implements Name,
      * The size of the file in bytes
      * (File only attribute)
      */
-    public final static FilesystemNodeAttributeName SIZE = new FilesystemNodeAttributeName("SIZE") {
+    public final static FilesystemNodeAttributeName SIZE = new FilesystemNodeAttributeName("size") {
         @Override
         String read(final FilesystemNode node) {
             return node.size();
@@ -101,7 +101,7 @@ public abstract class FilesystemNodeAttributeName implements Name,
      * The text attribute holds the text for a given file.
      * (File only attribute)
      */
-    public final static FilesystemNodeAttributeName TEXT = new FilesystemNodeAttributeName("TEXT") {
+    public final static FilesystemNodeAttributeName TEXT = new FilesystemNodeAttributeName("text") {
         @Override
         String read(final FilesystemNode node) {
             return node.text();
@@ -111,7 +111,7 @@ public abstract class FilesystemNodeAttributeName implements Name,
     /**
      * A String value that currently holds either: FILE or DIRECTORY.
      */
-    public final static FilesystemNodeAttributeName TYPE = new FilesystemNodeAttributeName("TYPE") {
+    public final static FilesystemNodeAttributeName TYPE = new FilesystemNodeAttributeName("type") {
         @Override
         String read(final FilesystemNode node) {
             return node.type();
