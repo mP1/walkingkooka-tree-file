@@ -40,7 +40,6 @@ import walkingkooka.tree.expression.convert.ExpressionNumberConverterContext;
 import walkingkooka.tree.expression.convert.ExpressionNumberConverterContexts;
 import walkingkooka.tree.expression.function.ExpressionFunction;
 import walkingkooka.tree.expression.function.ExpressionFunctions;
-import walkingkooka.tree.expression.function.UnknownExpressionFunctionException;
 import walkingkooka.tree.expression.function.string.StringExpressionFunctions;
 import walkingkooka.tree.file.FilesystemNode;
 import walkingkooka.tree.file.FilesystemNodeAttributeName;
@@ -191,7 +190,7 @@ public final class ReadmeSample {
             nameToFunction.get(name)
         );
         if (null == function) {
-            throw new UnknownExpressionFunctionException(name);
+            throw name.unknownExpressionFunctionException();
         }
 
         return function;
