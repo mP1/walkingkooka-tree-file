@@ -48,6 +48,7 @@ import walkingkooka.tree.file.FilesystemNodeContexts;
 import walkingkooka.tree.file.FilesystemNodeName;
 import walkingkooka.tree.select.NodeSelector;
 import walkingkooka.tree.select.NodeSelectorContext;
+import walkingkooka.tree.select.NodeSelectorContexts;
 import walkingkooka.tree.select.NodeSelectorExpressionEvaluationContexts;
 import walkingkooka.tree.select.parser.ExpressionNodeSelectorParserToken;
 import walkingkooka.tree.select.parser.NodeSelectorParserContext;
@@ -101,8 +102,9 @@ public final class ReadmeSample {
         final FilesystemNodeContext filesystemNodeContext = FilesystemNodeContexts.basic(baseDir);
 
         // stream, filter if files contain arg[2] and then print matching files.
-        find.stream(filesystemNodeContext.directory(baseDir),
-                ReadmeSample::expressionEvaluationContext,
+        find.stream(
+            filesystemNodeContext.directory(baseDir),
+                ReadmeSample.nodeSelectorContext(),
                 FilesystemNode.class)
             .filter(f -> {
                 // filter equivalent of [contains(@text, "insert arg2 here"])
@@ -115,29 +117,33 @@ public final class ReadmeSample {
             .forEach(System.out::println);
     }
 
-    private static ExpressionEvaluationContext expressionEvaluationContext(final NodeSelectorContext<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> selectorContext) {
-        final FilesystemNode file = selectorContext.node();
-
-        return NodeSelectorExpressionEvaluationContexts.basic(
-            file,
-            ExpressionEvaluationContexts.basic(
-                KIND,
-                (e, c) -> {
-                    throw new UnsupportedOperationException();
-                },
-                functions(),
-                (e) -> {
-                    throw e;
-                },
-                references(),
-                (rr) -> {
-                    throw new UnsupportedOperationException();
-                },
-                CaseSensitivity.SENSITIVE,
-                converterContext(),
-                EnvironmentContexts.fake(),
-                LocaleContexts.fake()
-            )
+    private static NodeSelectorContext<FilesystemNode, FilesystemNodeName, FilesystemNodeAttributeName, String> nodeSelectorContext() {
+        return NodeSelectorContexts.basic(
+            () -> false, // finisher ?
+            Predicates.always(), // filter
+            Function.identity(), // mapper
+            (final FilesystemNode node) -> NodeSelectorExpressionEvaluationContexts.basic(
+                node,
+                ExpressionEvaluationContexts.basic(
+                    KIND,
+                    (e, c) -> {
+                        throw new UnsupportedOperationException();
+                    },
+                    functions(),
+                    (e) -> {
+                        throw e;
+                    },
+                    references(),
+                    (rr) -> {
+                        throw new UnsupportedOperationException();
+                    },
+                    CaseSensitivity.SENSITIVE,
+                    converterContext(),
+                    EnvironmentContexts.fake(),
+                    LocaleContexts.fake()
+                )
+            ),
+            FilesystemNode.class
         );
     }
 
