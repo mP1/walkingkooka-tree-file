@@ -211,9 +211,9 @@ public final class ReadmeSample {
     private static ExpressionNumberConverterContext converterContext() {
         return ExpressionNumberConverterContexts.basic(
             converter(),
+            KIND,
             BinaryNumberConverterFunctions.fake(),
-            ConverterContexts.fake(),
-            KIND
+            ConverterContexts.fake()
         );
     }
 
