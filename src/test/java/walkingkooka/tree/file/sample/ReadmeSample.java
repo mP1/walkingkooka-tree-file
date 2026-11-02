@@ -36,8 +36,8 @@ import walkingkooka.tree.expression.ExpressionEvaluationContexts;
 import walkingkooka.tree.expression.ExpressionFunctionName;
 import walkingkooka.tree.expression.ExpressionNumberKind;
 import walkingkooka.tree.expression.ExpressionReference;
-import walkingkooka.tree.expression.convert.ExpressionNumberConverterContext;
-import walkingkooka.tree.expression.convert.ExpressionNumberConverterContexts;
+import walkingkooka.tree.expression.convert.TreeConverterContext;
+import walkingkooka.tree.expression.convert.TreeConverterContexts;
 import walkingkooka.tree.expression.function.ExpressionFunction;
 import walkingkooka.tree.expression.function.ExpressionFunctions;
 import walkingkooka.tree.expression.function.string.StringExpressionFunctions;
@@ -208,8 +208,8 @@ public final class ReadmeSample {
         });
     }
 
-    private static ExpressionNumberConverterContext converterContext() {
-        return ExpressionNumberConverterContexts.basic(
+    private static TreeConverterContext converterContext() {
+        return TreeConverterContexts.basic(
             converter(),
             KIND,
             BinaryNumberConverterFunctions.fake(),
@@ -217,19 +217,19 @@ public final class ReadmeSample {
         );
     }
 
-    private static Converter<ExpressionNumberConverterContext> converter() {
+    private static Converter<TreeConverterContext> converter() {
         return new FakeConverter<>() {
             @Override
             public boolean canConvert(final Object value,
                                       final Class<?> type,
-                                      final ExpressionNumberConverterContext context) {
+                                      final TreeConverterContext context) {
                 return type.isInstance(value);
             }
 
             @Override
             public <T> Either<T, String> convert(final Object value,
                                                  final Class<T> type,
-                                                 final ExpressionNumberConverterContext context) {
+                                                 final TreeConverterContext context) {
                 return this.canConvert(value, type, context) ?
                     Either.left(type.cast(value)) :
                     this.failConversion(value, type);
