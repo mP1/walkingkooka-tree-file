@@ -24,8 +24,8 @@ import walkingkooka.convert.BinaryNumberConverterFunctions;
 import walkingkooka.convert.Converter;
 import walkingkooka.convert.ConverterContexts;
 import walkingkooka.convert.FakeConverter;
-import walkingkooka.environment.EnvironmentContexts;
 import walkingkooka.locale.LocaleContexts;
+import walkingkooka.logging.LoggingContexts;
 import walkingkooka.predicate.Predicates;
 import walkingkooka.text.CaseSensitivity;
 import walkingkooka.text.cursor.TextCursors;
@@ -139,8 +139,8 @@ public final class ReadmeSample {
                     },
                     CaseSensitivity.SENSITIVE,
                     converterContext(),
-                    EnvironmentContexts.fake(),
-                    LocaleContexts.fake()
+                    LocaleContexts.fake(),
+                    LoggingContexts.fake()
                 )
             ),
             FilesystemNode.class
